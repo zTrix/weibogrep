@@ -1,0 +1,5 @@
+1.在paoding-dic-home.properties中设置字典位置
+2.修改tomcat/conf/server.xml文件中的Connnector属性，加上 URIEncoding="UTF-8"，对应html文件中表单最好用"GET"，这样中文不会乱码
+3.注意修改indexDir位置
+4.注意修改FIELD_NAME
+5.index重建后通过/renewindexnotif.do 来通知web程序重新读取indexDir 或者重启tomcat
