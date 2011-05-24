@@ -17,17 +17,33 @@ public class UserMgmt {
     private File configFile;
     private File indexFile;
     private User user;
+    private long id = -1;
     private String token;
     private String secret;
 
     public UserMgmt(User u) {
         if (u == null) return;
         this.user = u;
-        userdir = new File(baseDirFile, ""  +u.getId());
+        this.id = u.getId();
+        userdir = new File(baseDirFile, "" + id);
         if (exist()) {
             configFile = new File(userdir, config);
             indexFile = new File(userdir, index);
         }
+    }
+    
+    public UserMgmt(long id) {
+    	if (id < 0) return;
+        this.id = id;
+        userdir = new File(baseDirFile, "" + id);
+        if (exist()) {
+            configFile = new File(userdir, config);
+            indexFile = new File(userdir, index);
+        }
+    }
+    
+    public User getUser() {
+    	return user;
     }
 
     public boolean exist() {
@@ -88,7 +104,7 @@ public class UserMgmt {
             BufferedWriter out = new BufferedWriter(
                                   new OutputStreamWriter(
                                   new FileOutputStream(configFile)));
-            out.write("" + user.getId());
+            out.write("" + id);
             out.newLine();
             out.write(token);
             out.newLine();

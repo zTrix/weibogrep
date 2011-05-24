@@ -8,20 +8,20 @@
     <description>Do Query </description>
     <display-name>QueryServlet</display-name>
     <servlet-name>QueryServlet</servlet-name>
-    <servlet-class>com.weibogrep.grep.servlet.QueryServlet</servlet-class>
+    <servlet-class>com.weibogrep.servlet.QueryServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>QueryServlet</servlet-name>
     <url-pattern>/query.do</url-pattern>
   </servlet-mapping>
   <listener>
-    <listener-class>com.weibogrep.grep.servlet.StartupListener</listener-class>
+    <listener-class>com.weibogrep.servlet.StartupListener</listener-class>
   </listener>
   <servlet>
     <description>Notif the web that the index is rebuild</description>
     <display-name>RenewIndexServlet</display-name>
     <servlet-name>RenewIndexServlet</servlet-name>
-    <servlet-class>com.abysshal.snsgrep.servlet.RenewIndexServlet</servlet-class>
+    <servlet-class>com.weibogrep.servlet.RenewIndexServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>RenewIndexServlet</servlet-name>

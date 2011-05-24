@@ -1,4 +1,4 @@
-package com.weibogrep.grep.servlet;
+package com.weibogrep.servlet;
 
 import java.io.IOException;
 
@@ -21,20 +21,13 @@ import org.apache.lucene.search.highlight.QueryScorer;
 import org.apache.lucene.search.highlight.SimpleFragmenter;
 import org.apache.lucene.search.highlight.TokenSources;
 
-import com.weibogrep.grep.util.Config;
+import com.weibogrep.util.Config;
 
-/**
- * Servlet implementation class QueryServlet
- */
 public class QueryServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
     public QueryServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
     /**
@@ -56,8 +49,9 @@ public class QueryServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
-        response.setCharacterEncoding("UTF-8");     
-        String queryString = request.getParameter("query");     
+        response.setCharacterEncoding("UTF-8");
+        String queryString = request.getParameter("query");
+        long uid = Long.parseLong(request.getParameter("uid"));
         try {
             if (queryString == null) {
                 throw new Exception("No query!");

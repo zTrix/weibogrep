@@ -1,4 +1,4 @@
-package com.weibogrep.grep.util;
+package com.weibogrep.util;
 
 import java.io.File;
 

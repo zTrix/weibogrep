@@ -1,4 +1,4 @@
-package com.weibogrep.grep.servlet;
+package com.weibogrep.servlet;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -19,7 +19,7 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 
-import com.weibogrep.grep.util.Config;
+import com.weibogrep.util.Config;
 
 /**
  * Application Lifecycle Listener implementation class StartupListener
