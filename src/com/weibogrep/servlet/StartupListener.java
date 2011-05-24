@@ -19,7 +19,6 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 
-import com.weibogrep.util.Config;
 
 /**
  * Application Lifecycle Listener implementation class StartupListener
@@ -38,7 +37,7 @@ public class StartupListener implements ServletContextListener {
      * @see ServletContextListener#contextInitialized(ServletContextEvent)
      */
     public void contextInitialized(ServletContextEvent arg0) {
-    	Config.initIndexer();
+    	
     }
 
 	/**

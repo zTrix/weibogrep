@@ -21,7 +21,8 @@ import org.apache.lucene.search.highlight.QueryScorer;
 import org.apache.lucene.search.highlight.SimpleFragmenter;
 import org.apache.lucene.search.highlight.TokenSources;
 
-import com.weibogrep.util.Config;
+import com.weibogrep.indexer.*;
+import com.weibogrep.user.*;
 
 public class QueryServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -50,33 +51,19 @@ public class QueryServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
         response.setCharacterEncoding("UTF-8");
-        String queryString = request.getParameter("query");
-        long uid = Long.parseLong(request.getParameter("uid"));
+        
         try {
-            if (queryString == null) {
-                throw new Exception("No query!");
+        	if (request.getParameter("uid") == null || request.getParameter("query") == null) {
+            	throw new Exception("No query or uid");
             }
+
+        	String queryString = request.getParameter("query");
+            long uid = Long.parseLong(request.getParameter("uid"));
             
-            response.getWriter().println("QueryString=" + queryString + "<br>");
-            Query query = Config.parser.parse(queryString);
-            query = query.rewrite(Config.reader);
-            TopDocs hits = Config.searcher.search(query, 10);
-            System.out.println(queryString + "] Searching for: " + query.toString(Config.FIELD_NAME)  + "<br>");
-            
-            BoldFormatter formatter = new BoldFormatter();
-            Highlighter highlighter = new Highlighter(formatter, new QueryScorer(query));
-            highlighter.setTextFragmenter(new SimpleFragmenter(50));
-            for (int i = 0; i < hits.scoreDocs.length; i++) {
-                int docId = hits.scoreDocs[i].doc;
-                Document hit = Config.searcher.doc(docId);
-                String text = hit.get(Config.FIELD_NAME);
-                int maxNumFragmentsRequired = 5;
-                String fragmentSeparator = "...";
-                TermPositionVector tpv = (TermPositionVector) Config.reader.getTermFreqVector(docId, Config.FIELD_NAME);
-                TokenStream tokenStream = TokenSources.getTokenStream(tpv);
-                String result = highlighter.getBestFragments(tokenStream, text,
-                        maxNumFragmentsRequired, fragmentSeparator);
-                response.getWriter().println("<br>" + result);
+            response.getWriter().println("queryString = " + queryString);
+            String[] rs = new Greper(queryString, new UserMgmt(uid).getIndexDir()).result();
+            for (int i = 0; i < rs.length; i++) {
+            	response.getWriter().println(rs[i]);
             }
         } catch (Exception ex){
             response.getWriter().println("ERROR:\n" + ex.getMessage());                     
