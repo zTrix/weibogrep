@@ -7,6 +7,7 @@
 AccessToken accessToken = (AccessToken) session.getAttribute("accessToken");
 String userStatus = "";
 if (accessToken != null) {
+    out.println("accesstoken");
     userStatus = WeiboGate.getUserTimeline(accessToken);
 } else {
     response.sendRedirect("login.jsp"); 
