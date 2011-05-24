@@ -10,11 +10,13 @@ public class WebOAuth {
 
     public static String ConsumerKey = "2790022981";
     public static String ConsumerSecret = "f714dca6b10a2763cb866000c8fcabc3";
+    static {
+        System.setProperty("weibo4j.oauth.consumerKey", ConsumerKey);
+        System.setProperty("weibo4j.oauth.consumerSecret", ConsumerSecret);
+    }
 
     public static RequestToken request(String backUrl) {
         try {
-            System.setProperty("weibo4j.oauth.consumerKey", ConsumerKey);
-            System.setProperty("weibo4j.oauth.consumerSecret", ConsumerSecret);
             
             Weibo weibo = new Weibo();
             RequestToken requestToken = weibo.getOAuthRequestToken(backUrl);
@@ -32,8 +34,6 @@ public class WebOAuth {
 
     public static AccessToken requstAccessToken(RequestToken requestToken, String verifier) {
         try {
-            System.setProperty("weibo4j.oauth.consumerKey", ConsumerKey);
-            System.setProperty("weibo4j.oauth.consumerSecret", ConsumerSecret);
 
             Weibo weibo = new Weibo();
             AccessToken accessToken = weibo.getOAuthAccessToken(requestToken

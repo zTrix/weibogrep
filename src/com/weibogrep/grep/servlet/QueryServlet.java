@@ -21,7 +21,7 @@ import org.apache.lucene.search.highlight.QueryScorer;
 import org.apache.lucene.search.highlight.SimpleFragmenter;
 import org.apache.lucene.search.highlight.TokenSources;
 
-import com.abysshal.snsgrep.util.Config;
+import com.weibogrep.grep.util.Config;
 
 /**
  * Servlet implementation class QueryServlet

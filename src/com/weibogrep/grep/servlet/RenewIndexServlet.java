@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.abysshal.snsgrep.util.Config;
+import com.weibogrep.grep.util.Config;
 
 /**
  * Servlet implementation class RenewIndexServlet

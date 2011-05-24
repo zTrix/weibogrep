@@ -40,6 +40,11 @@ if [ ! -f ./bin/paoding-dic-home.properties ];then
     cp ./config/* ./bin/
 fi
 
+if [ ! -d /tmp/weibogrep ];then
+    echo [ MD ] /tmp/weibogrep
+    mkdir -p /tmp/weibogrep
+fi
+
 echo [ ANT ] build
 ant || exit
 
