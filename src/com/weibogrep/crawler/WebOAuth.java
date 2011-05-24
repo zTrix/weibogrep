@@ -1,4 +1,4 @@
-package weibo4j.examples;
+package com.weibogrep.crawler;
 
 import weibo4j.Status;
 import weibo4j.Weibo;
@@ -8,10 +8,13 @@ import weibo4j.http.RequestToken;
 
 public class WebOAuth {
 
+    public static String ConsumerKey = "2790022981";
+    public static String ConsumerSecret = "f714dca6b10a2763cb866000c8fcabc3";
+
     public static RequestToken request(String backUrl) {
         try {
-            System.setProperty("weibo4j.oauth.consumerKey", "2790022981");
-            System.setProperty("weibo4j.oauth.consumerSecret","f714dca6b10a2763cb866000c8fcabc3");
+            System.setProperty("weibo4j.oauth.consumerKey", ConsumerKey);
+            System.setProperty("weibo4j.oauth.consumerSecret", ConsumerSecret);
             
             Weibo weibo = new Weibo();
             RequestToken requestToken = weibo.getOAuthRequestToken(backUrl);
@@ -27,12 +30,10 @@ public class WebOAuth {
         }
     }
 
-    public static AccessToken requstAccessToken(RequestToken requestToken,
-            String verifier) {
+    public static AccessToken requstAccessToken(RequestToken requestToken, String verifier) {
         try {
-            System.setProperty("weibo4j.oauth.consumerKey", Weibo.CONSUMER_KEY);
-            System.setProperty("weibo4j.oauth.consumerSecret",
-                    Weibo.CONSUMER_SECRET);
+            System.setProperty("weibo4j.oauth.consumerKey", ConsumerKey);
+            System.setProperty("weibo4j.oauth.consumerSecret", ConsumerSecret);
 
             Weibo weibo = new Weibo();
             AccessToken accessToken = weibo.getOAuthAccessToken(requestToken
@@ -46,18 +47,6 @@ public class WebOAuth {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
-        }
-    }
-
-    public static void update(AccessToken access, String content) {
-        try {
-            Weibo weibo = new Weibo();
-            weibo.setToken(access.getToken(), access.getTokenSecret());
-            Status status = weibo.updateStatus(content);
-            System.out.println("Successfully updated the status to ["
-                            + status.getText() + "].");
-        } catch (WeiboException e) {
-            e.printStackTrace();
         }
     }
 }

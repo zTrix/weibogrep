@@ -1,50 +1,27 @@
 <%@ page contentType="text/html;charset=utf-8" %>
 <%@ page language="java" import="weibo4j.http.*" %>
 <%@ page language="java" import="weibo4j.*" %>
+<%@ page language="java" import="com.weibogrep.crawler.*" %>
 
-<jsp:useBean id="weboauth" scope="session" class="weibo4j.examples.WebOAuth" />
-<jsp:useBean id="smt" scope="application" class="org.thunlp.tagsuggest.contentbase.SMTwithTfidfWeibo"></jsp:useBean>
 <%
-	
-	String verifier=request.getParameter("oauth_verifier");
-	if(verifier!=null)
-	{
-		System.out.println("oauth:"+verifier);
-		RequestToken resToken=(RequestToken) session.getAttribute("resToken");
+    String verifier = request.getParameter("oauth_verifier");
+    if(verifier != null) {
+        RequestToken resToken = (RequestToken) session.getAttribute("resToken");
 
-		if(resToken!=null)
-		{
-			AccessToken accessToken=weboauth.requstAccessToken(resToken,verifier);
-				if(accessToken!=null)
-				{
-					//out.println(accessToken.getToken());
-					//out.println(accessToken.getTokenSecret());
-					//第二个参数每次只能用一次，发表微博内容不能重复，如果重复发会返回400错误
-					//这个accessToken不用每次访问都重新取，可以存到session里面用
-					//weboauth.update(accessToken,"web方式发表微博4");
-					//out.println("发表成功");
-					session.setAttribute("accessToken",accessToken); 
-					String input = weboauth.getUserStatus(accessToken);
-					out.println("读取用户微博成功<br>");
-					String image = smt.suggest(input);
-					out.println("创建图片成功"+image+"<br>");
-					session.setAttribute("imageName",image);
+        if(resToken!=null) {
+            AccessToken accessToken = WebOAuth.requstAccessToken(resToken,verifier);
+            if (accessToken != null) {
+                    session.setAttribute("accessToken", accessToken);
+                    response.sendRedirect("index.jsp");
+                    //String input = WeiboGate.getUserTimeline(accessToken);
+                    //out.println("读取用户微博成功<br>" + input);
+            } else {
+                out.println("access token request error");
+            }
+        } else {
+            out.println("request token session error");
+        }
+    } else {
+        out.println("verifier String error");
+    }
 %>
-<img src="image/<%=image%>"/><br>
-<a href="callback2.jsp"><img src="image/share_button_l.gif"/></a><br>
-<%}else
-					{
-					out.println("access token request error");
-					}
-		
-		}
-		else
-			{
-			out.println("request token session error");
-			}
-	}
-	else
-		{
-		out.println("verifier String error");
-		}
-%>   
