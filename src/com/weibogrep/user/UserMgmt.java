@@ -18,11 +18,13 @@ public class UserMgmt {
     private static final String config = "_config";
     private static final String index = "_index";
     private static final String last = "_last";     // last timeline
+    private static final String lock = "_lock";     // prevent update chaos
 
     private File userdir;
     private File configFile;
     private File indexFile;
     private File lastFile;
+    private File lockFile;
     private User user;
     private long id = -1;
     private String token;
@@ -33,6 +35,7 @@ public class UserMgmt {
         this.user = u;
         this.id = u.getId();
         userdir = new File(baseDirFile, "" + id);
+        lockFile = new File(userdir, lock);
         if (exist()) {
             configFile = new File(userdir, config);
             indexFile = new File(userdir, index);
@@ -193,7 +196,7 @@ public class UserMgmt {
             e.printStackTrace();
             return -4;
         }
-        
+
         return 0;
     }
 
@@ -212,6 +215,17 @@ public class UserMgmt {
 
     // get newer items and update index
     public void update() {
+        if (lockFile.exists()) {
+            ZLog.info("user: " + id + " index locked, exist update");
+            return;
+        }
+        try {
+            lockFile.createNewFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+            ZLog.err("user: " + id + " , cannot create lock file");
+            return;
+        }
         long last = getLastPost();
         String[] token = getToken();
         AccessToken access = new AccessToken(token[0], token[1]);
@@ -223,6 +237,7 @@ public class UserMgmt {
         } else {
             ZLog.info("user: " + id + " updating, no docs to update");
         }
+        lockFile.delete();
     }
 }
 
