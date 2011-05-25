@@ -51,27 +51,23 @@ public class QueryServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(true);
         
-        response.setContentType("text/json");
+        response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
        
         try {
             UserMgmt um = (UserMgmt) session.getAttribute("user");
             if (um == null) {
-                response.getWriter().print(
-                    new JSONObject().put("error" , -1)
-                                    .put("errmsg", "user not logged in")
-                                    .toString()
-                );
+                new JSONObject().put("error" , -1)
+                                .put("errmsg", "user not logged in")
+                                .write(response.getWriter());
                 return;
             }
 
             String queryString = request.getParameter("query");
             if (queryString == null) {
-                response.getWriter().print(
-                    new JSONObject().put("error" , -2)
-                                    .put("errmsg", "query string not provided")
-                                    .toString()
-                );
+                new JSONObject().put("error" , -2)
+                                .put("errmsg", "query string not provided")
+                                .write(response.getWriter());
             }
             
             try {
@@ -100,11 +96,9 @@ public class QueryServlet extends HttpServlet {
                     );
                 }
             } catch (Exception e) {
-                response.getWriter().print(
-                    new JSONObject().put("error",  -3)
-                                    .put("errmsg", "internal error, cannot create greper")
-                                    .toString()
-                );
+                new JSONObject().put("error",  -3)
+                                .put("errmsg", "internal error, cannot create greper")
+                                .write(response.getWriter());
             }
             
             try {
@@ -117,11 +111,9 @@ public class QueryServlet extends HttpServlet {
                     response.getWriter().println(rs[i]);
                 }
             } catch (Exception ex){
-                response.getWriter().print(
-                    new JSONObject().put("error",  -4)
-                                    .put("errmsg", "internal error, grep error")
-                                    .toString()
-                );
+                new JSONObject().put("error",  -4)
+                                .put("errmsg", "internal error, grep error")
+                                .write(response.getWriter());
             }
         } catch (JSONException e) {
             response.getWriter().print("{error:-100, errmsg: json error}");
