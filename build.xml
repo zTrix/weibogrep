@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <project name="weibogrep" default="compile" basedir=".">
-    <property name="lib.dir" value="../lib" />
+    <property name="lib.dir" value="lib" />
     <property name="src.dir" value="src" />
     <property name="bin.dir" value="bin" />
     <property name="tomcat.home" value="/opt/tomcat" />
