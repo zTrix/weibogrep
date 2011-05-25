@@ -68,7 +68,6 @@ public class UserMgmt {
             BufferedReader br = new BufferedReader(
                                 new InputStreamReader(
                                 new FileInputStream(configFile)));
-            br.readLine();
             ret[0] = br.readLine();
             ret[1] = br.readLine();
             token = ret[0];
@@ -102,10 +101,8 @@ public class UserMgmt {
         }
         try {
             BufferedWriter out = new BufferedWriter(
-                                  new OutputStreamWriter(
-                                  new FileOutputStream(configFile)));
-            out.write("" + id);
-            out.newLine();
+                                 new OutputStreamWriter(
+                                 new FileOutputStream(configFile)));
             out.write(token);
             out.newLine();
             out.write(secret);
