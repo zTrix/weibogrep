@@ -21,7 +21,8 @@ if (accessToken != null) {
         um.addDoc(userStatus);
     }
 } else {
-    response.sendRedirect("login.jsp"); 
+    response.sendRedirect("login.jsp");
+    return;
 }
 %>
 
