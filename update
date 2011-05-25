@@ -1,6 +1,13 @@
+prj=`pwd`
+lib=$prj/lib
+for i in $lib/*.jar;do
+    export CLASSPATH=$CLASSPATH:$i
+done
+
 pushd bin > /dev/null
 
-echo [ RUN ] java com.weibogrep.user.Updater
+echo " [ RUN ] java com.weibogrep.user.Updater"
+
 java com.weibogrep.user.Updater
 
 popd > /dev/null

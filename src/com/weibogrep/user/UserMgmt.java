@@ -10,6 +10,7 @@ import weibo4j.http.AccessToken;
 
 import com.weibogrep.crawler.WeiboGate;
 import com.weibogrep.indexer.*;
+import com.weibogrep.util.*;
 
 public class UserMgmt {
     public  static final String BASE_DIR = "/tmp/weibogrep";
@@ -72,6 +73,7 @@ public class UserMgmt {
                                  new FileOutputStream(lastFile)));
             out.write("" + postId);
             out.close();
+            ZLog.info("user: " + id + " , index is updated, last id is " + postId);
         } catch (Exception e) {
             e.printStackTrace();
             return -2;
@@ -191,7 +193,7 @@ public class UserMgmt {
         return 0;
     }
 
-    public int addDoc(List<Status> sts) {
+    private int addDoc(List<Status> sts) {
         if (indexFile == null) {
             return -1;
         }
@@ -201,7 +203,6 @@ public class UserMgmt {
             items[i++] = new IndexItem(st.getId(), st.getText(), st.getCreatedAt());
         }
         Indexer.index(items, indexFile);
-        this.updateLastPost(sts.get(0).getId());
         return 0;
     }
 
@@ -211,7 +212,13 @@ public class UserMgmt {
         String[] token = getToken();
         AccessToken access = new AccessToken(token[0], token[1]);
         List<Status> userStatus = WeiboGate.getHomeTimeline(access, last);
-        addDoc(userStatus);
+        if (userStatus.size() > 0) {
+            ZLog.info("user: " + id + " updating, adding " + userStatus.size() + " docs");
+            addDoc(userStatus);
+            this.updateLastPost(userStatus.get(0).getId());
+        } else {
+            ZLog.info("user: " + id + " updating, no docs to update");
+        }
     }
 }
 

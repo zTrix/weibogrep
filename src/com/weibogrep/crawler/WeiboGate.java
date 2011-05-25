@@ -13,6 +13,12 @@ import weibo4j.http.AccessToken;
 import weibo4j.http.RequestToken;
 
 public class WeiboGate {
+    
+    // set oauth keys and secret
+    static {
+        WebOAuth w = new WebOAuth();
+    }
+
     public static User getUser(AccessToken access) {
         Weibo wb = new Weibo();
         User u;
