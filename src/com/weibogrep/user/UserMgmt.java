@@ -47,6 +47,7 @@ public class UserMgmt {
     	if (id < 0) return;
         this.id = id;
         userdir = new File(baseDirFile, "" + id);
+        lockFile = new File(userdir, lock);
         if (exist()) {
             configFile = new File(userdir, config);
             indexFile = new File(userdir, index);

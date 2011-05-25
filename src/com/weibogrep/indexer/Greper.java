@@ -20,6 +20,8 @@ import org.apache.lucene.search.highlight.QueryScorer;
 import org.apache.lucene.search.highlight.SimpleFragmenter;
 import org.apache.lucene.search.highlight.TokenSources;
 
+import com.weibogrep.util.ZLog;
+
 import net.paoding.analysis.examples.gettingstarted.BoldFormatter;
 
 public class Greper {
@@ -30,6 +32,7 @@ public class Greper {
     public Greper(String query, File indexDir) {
         this.queryStr = query;
         this.indexDir = indexDir;
+        assert(indexDir != null);
     }
 
     public String[] grep(QueryParser parser, IndexReader reader, IndexSearcher greper) {
@@ -57,6 +60,7 @@ public class Greper {
 	        return ret;
     	} catch (Exception e) {
     		e.printStackTrace();
+    		ZLog.err(e.toString());
     		return null;
     	}
     }

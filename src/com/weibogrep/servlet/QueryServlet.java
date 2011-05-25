@@ -30,6 +30,7 @@ import org.apache.lucene.util.Version;
 
 import com.weibogrep.indexer.*;
 import com.weibogrep.user.*;
+import com.weibogrep.util.ZLog;
 
 import weibo4j.org.json.*;
 
@@ -112,6 +113,7 @@ public class QueryServlet extends HttpServlet {
                 new JSONObject().put("error", 0)
                 				.put("result", rs)
                 				.write(response.getWriter());
+                ZLog.info("user: " + um.getId() + " query: " + queryString);
             } catch (Exception e){
                 new JSONObject().put("error",  -4)
                                 .put("errmsg", "internal error, grep error: " + e.getMessage())
