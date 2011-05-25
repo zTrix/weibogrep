@@ -49,9 +49,9 @@ echo [ ANT ] build
 ant || exit
 
 echo [ CLR ] clean log file
-> $TOMCAT/logs/*.out
-> $TOMCAT/logs/*.err
-> $TOMCAT/logs/*.txt
+for i in $TOMCAT/logs/* ;do
+> $i
+done
 
 echo [ TOMCAT ] restart
 /etc/rc.d/tomcat7 restart
