@@ -20,6 +20,7 @@ if (accessToken != null) {
         List<Status> userStatus = WeiboGate.getUserTimeline(accessToken);
         um.addDoc(userStatus);
     }
+    session.setAttribute("user", um);
 } else {
     response.sendRedirect("login.jsp");
     return;

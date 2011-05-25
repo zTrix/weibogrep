@@ -4,6 +4,10 @@
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
+  <session-config>
+    <session-timeout>-1</session-timeout>
+  </session-config>
+
   <servlet>
     <description>Do Query </description>
     <display-name>QueryServlet</display-name>
@@ -12,20 +16,21 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>QueryServlet</servlet-name>
-    <url-pattern>/query.do</url-pattern>
+    <url-pattern>/query</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <description>Logout</description>
+    <display-name>LogoutServlet</display-name>
+    <servlet-name>LogoutServlet</servlet-name>
+    <servlet-class>com.weibogrep.servlet.LogoutServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LogoutServlet</servlet-name>
+    <url-pattern>/logout</url-pattern>
+  </servlet-mapping>
+  
   <listener>
     <listener-class>com.weibogrep.servlet.StartupListener</listener-class>
   </listener>
-  <servlet>
-    <description>Notif the web that the index is rebuild</description>
-    <display-name>RenewIndexServlet</display-name>
-    <servlet-name>RenewIndexServlet</servlet-name>
-    <servlet-class>com.weibogrep.servlet.RenewIndexServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>RenewIndexServlet</servlet-name>
-    <url-pattern>/RenewIndexServlet</url-pattern>
-    <url-pattern>/renewindexnotif.do</url-pattern>
-  </servlet-mapping>
 </web-app>
