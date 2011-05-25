@@ -3,7 +3,7 @@
 <%@ page language="java" import="weibo4j.http.*" %>
 <%@ page language="java" import="com.weibogrep.crawler.*" %>
 <%
-    RequestToken resToken = WebOAuth.request("http://weibogrep/callback.jsp");
+    RequestToken resToken = WebOAuth.request("http://weibogrep/callback");
     if(resToken != null) {
         //out.println(resToken.getToken()); 
         //out.println(resToken.getTokenSecret()); 
