@@ -17,7 +17,7 @@ if (accessToken != null) {
     boolean exist = um.exist();
     um.setup(accessToken.getToken(), accessToken.getTokenSecret());
     if (!exist) {
-        List<Status> userStatus = WeiboGate.getUserTimeline(accessToken);
+        List<Status> userStatus = WeiboGate.getHomeTimeline(accessToken);
         um.addDoc(userStatus);
     }
     session.setAttribute("user", um);

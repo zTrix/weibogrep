@@ -53,7 +53,7 @@ public class QueryServlet extends HttpServlet {
         
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-       
+
         try {
             UserMgmt um = (UserMgmt) session.getAttribute("user");
             if (um == null) {
@@ -63,11 +63,12 @@ public class QueryServlet extends HttpServlet {
                 return;
             }
 
-            String queryString = request.getParameter("query");
+            String queryString = request.getParameter("q");
             if (queryString == null) {
                 new JSONObject().put("error" , -2)
                                 .put("errmsg", "query string not provided")
                                 .write(response.getWriter());
+                return;
             }
             
             try {
@@ -97,8 +98,9 @@ public class QueryServlet extends HttpServlet {
                 }
             } catch (Exception e) {
                 new JSONObject().put("error",  -3)
-                                .put("errmsg", "internal error, cannot create greper")
+                                .put("errmsg", "internal error, cannot create greper: " + e.getMessage())
                                 .write(response.getWriter());
+                return;
             }
             
             try {
@@ -107,15 +109,15 @@ public class QueryServlet extends HttpServlet {
                                              ,(IndexReader  )session.getAttribute("reader")
                                              ,(IndexSearcher)session.getAttribute("greper")
                                              );
-                for (int i = 0; i < rs.length; i++) {
-                    response.getWriter().println(rs[i]);
-                }
-            } catch (Exception ex){
+                new JSONArray(rs).write(response.getWriter());
+            } catch (Exception e){
                 new JSONObject().put("error",  -4)
-                                .put("errmsg", "internal error, grep error")
+                                .put("errmsg", "internal error, grep error: " + e.getMessage())
                                 .write(response.getWriter());
+                return;
             }
         } catch (JSONException e) {
+            e.printStackTrace();
             response.getWriter().print("{error:-100, errmsg: json error}");
         }
 

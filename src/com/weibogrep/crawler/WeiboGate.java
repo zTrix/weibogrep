@@ -40,8 +40,17 @@ public class WeiboGate {
         return statuses;
     }
 
-    public static String getHomeTimeline() {
-        return "";
+    public static List<Status> getHomeTimeline(AccessToken access) {
+    	Weibo wb = new Weibo();
+        wb.setToken(access.getToken(), access.getTokenSecret());
+        List<Status> statuses;
+        try {
+            statuses = wb.getHomeTimeline(new Paging(1, 200));
+        } catch (WeiboException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return statuses;
     }
 }
 
