@@ -48,5 +48,10 @@ fi
 echo [ ANT ] build
 ant || exit
 
+echo [ CLR ] clean log file
+> $TOMCAT/logs/*.out
+> $TOMCAT/logs/*.err
+> $TOMCAT/logs/*.txt
+
 echo [ TOMCAT ] restart
 /etc/rc.d/tomcat7 restart
