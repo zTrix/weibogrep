@@ -12,10 +12,12 @@ public class UserMgmt {
     private static final File baseDirFile = new File(BASE_DIR);
     private static final String config = "_config";
     private static final String index = "_index";
+    private static final String last = "_last";     // last timeline
 
     private File userdir;
     private File configFile;
     private File indexFile;
+    private File lastFile;
     private User user;
     private long id = -1;
     private String token;
@@ -29,6 +31,7 @@ public class UserMgmt {
         if (exist()) {
             configFile = new File(userdir, config);
             indexFile = new File(userdir, index);
+            lastFile = new File(userdir, last);
         }
     }
     
@@ -39,6 +42,7 @@ public class UserMgmt {
         if (exist()) {
             configFile = new File(userdir, config);
             indexFile = new File(userdir, index);
+            lastFile = new File(userdir, last);
         }
     }
     
@@ -52,6 +56,42 @@ public class UserMgmt {
 
     public File getIndexDir() {
         return indexFile;
+    }
+    
+    public int updateLastPost(long postId) {
+    	if (!exist()) {
+    		return -1;
+    	}
+        try {
+            BufferedWriter out = new BufferedWriter(
+                                 new OutputStreamWriter(
+                                 new FileOutputStream(configFile)));
+            out.write("" + postId);
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -2;
+        }
+        return 0;
+    }
+
+    public long getLastPost() {
+        if (!exist()) {
+            return -1;
+        }
+        try {
+        	BufferedReader br = new BufferedReader(
+				                new InputStreamReader(
+				                new FileInputStream(lastFile)));
+        	String s = br.readLine();
+        	if (s.length() < 1) {
+        		return 0;
+        	} else {
+        		return Long.parseLong(s);
+        	}
+        } catch (Exception e) {
+            return -2;
+        }
     }
 
     public String[] getToken() {
@@ -83,7 +123,23 @@ public class UserMgmt {
         this.token = token;
         this.secret = secret;
 
-        if (this.exist()) return 1;
+        if (this.exist()) {         // just update token and secret
+        	try {
+	            BufferedWriter out = new BufferedWriter(
+	                                 new OutputStreamWriter(
+	                                 new FileOutputStream(configFile)));
+	            out.write(token);
+	            out.newLine();
+	            out.write(secret);
+	            out.close();
+        	} catch(Exception e) {
+        		e.printStackTrace();
+        	}
+            return 1;
+        }
+
+        // create new user profile
+
         boolean b = userdir.mkdir();
         if (!b) {
             return -1;
@@ -115,6 +171,17 @@ public class UserMgmt {
         indexFile = new File(userdir, index);
         b = indexFile.mkdir();
         if (!b) return -3;
+
+        // setup last file
+        try {
+            b = lastFile.createNewFile();
+            if (!b) {
+                return -4;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -4;
+        }
         
         return 0;
     }
