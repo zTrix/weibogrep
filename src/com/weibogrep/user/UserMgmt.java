@@ -50,6 +50,10 @@ public class UserMgmt {
             lastFile = new File(userdir, last);
         }
     }
+
+    public long getId() {
+        return id;
+    }
     
     public User getUser() {
     	return user;

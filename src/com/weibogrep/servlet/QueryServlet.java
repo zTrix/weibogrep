@@ -109,7 +109,9 @@ public class QueryServlet extends HttpServlet {
                                              ,(IndexReader  )session.getAttribute("reader")
                                              ,(IndexSearcher)session.getAttribute("greper")
                                              );
-                new JSONArray(rs).write(response.getWriter());
+                new JSONObject().put("error", 0)
+                				.put("result", rs)
+                				.write(response.getWriter());
             } catch (Exception e){
                 new JSONObject().put("error",  -4)
                                 .put("errmsg", "internal error, grep error: " + e.getMessage())

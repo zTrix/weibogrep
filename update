@@ -8,7 +8,7 @@ pushd bin > /dev/null
 
 echo " [ RUN ] java com.weibogrep.user.Updater"
 
-java com.weibogrep.user.Updater
+java -Dcom.weibogrep.util.enable_color=true com.weibogrep.user.Updater
 
 popd > /dev/null
 
