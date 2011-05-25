@@ -42,6 +42,17 @@
   </servlet-mapping>
 
   <servlet>
+    <description>LoginStatus</description>
+    <display-name>LoginStatusServlet</display-name>
+    <servlet-name>LoginStatusServlet</servlet-name>
+    <servlet-class>com.weibogrep.servlet.LoginStatusServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LoginStatusServlet</servlet-name>
+    <url-pattern>/loginstatus</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <description>Logout</description>
     <display-name>LogoutServlet</display-name>
     <servlet-name>LogoutServlet</servlet-name>

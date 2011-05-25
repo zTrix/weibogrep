@@ -1,7 +1,7 @@
 
 
 (function($) {
-    var apis = 'query logout'.split(' ');
+    var apis = 'query logout loginstatus'.split(' ');
     $(apis).each(function(i, e) {
         $('<option/>').attr('value', e)
                       .text(e)

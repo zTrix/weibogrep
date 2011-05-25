@@ -10,11 +10,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.weibogrep.user.UserMgmt;
+import com.weibogrep.util.ZLog;
+
 import weibo4j.org.json.*;
 
-public class LogoutServlet extends HttpServlet {
+public class LoginStatusServlet extends HttpServlet {
 
-    public LogoutServlet() {
+    public LoginStatusServlet() {
         super();
     }
 
@@ -25,17 +28,16 @@ public class LogoutServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         try {
-            if (session != null && session.getAttribute("user") != null) {
-                session.invalidate();
-                new JSONObject().put("error", 0)
-                                .write(response.getWriter());
-            } else {
-                new JSONObject().put("error" , -1)
-                                .put("errmsg", "not logged in")
-                                .write(response.getWriter());
+            boolean value = (session != null) && (session.getAttribute("user") != null);
+            JSONObject o = new JSONObject().put("error", 0    )
+                                           .put("value", value);
+            if (value) {
+                o.put("uid", ((UserMgmt)session.getAttribute("user")).getId());
             }
+            o.write(response.getWriter());
         } catch(Exception e) {
-
+            ZLog.err("in LoginStatusServlet");
+            e.printStackTrace();
         }
     }
 }
