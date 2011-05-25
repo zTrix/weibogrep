@@ -3,8 +3,8 @@
     <property name="lib.dir" value="lib" />
     <property name="src.dir" value="src" />
     <property name="bin.dir" value="bin" />
-    <property name="tomcat.home" value="/opt/tomcat" />
-    <property name="tomcat.lib" value="${tomcat.home}/common/lib" />
+    <property name="tomcat.home" value="/usr/share/tomcat7" />
+    <property name="tomcat.lib" value="${tomcat.home}/lib" />
     <property name="tomcat.webapp" value="${tomcat.home}/webapps" />
 
     <path id="classpath">

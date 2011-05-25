@@ -1,6 +1,6 @@
 #!/bin/sh
 
-TOMCAT=/opt/tomcat
+TOMCAT=/usr/share/tomcat7
 WEBAPP=${TOMCAT}/webapps
 WEB=WebContent
 ROOT=${WEBAPP}/ROOT
@@ -49,4 +49,4 @@ echo [ ANT ] build
 ant || exit
 
 echo [ TOMCAT ] restart
-/etc/rc.d/tomcat restart
+/etc/rc.d/tomcat7 restart
