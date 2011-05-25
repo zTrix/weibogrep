@@ -17,7 +17,7 @@ fi
 
 if [ ! -d ${WEB}/WEB-INF/lib ];then
     echo [ LN ] lib
-    ln -s `pwd`/../lib ${WEB}/WEB-INF/lib
+    ln -s `pwd`/lib ${WEB}/WEB-INF/lib
 fi
 
 if [ ! -d ${WEB}/WEB-INF/classes ];then
