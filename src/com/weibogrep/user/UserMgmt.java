@@ -6,11 +6,13 @@ import java.util.*;
 import org.apache.commons.logging.impl.Log4JLogger;
 
 import weibo4j.*;
+import weibo4j.http.AccessToken;
 
+import com.weibogrep.crawler.WeiboGate;
 import com.weibogrep.indexer.*;
 
 public class UserMgmt {
-    private static final String BASE_DIR = "/tmp/weibogrep";
+    public  static final String BASE_DIR = "/tmp/weibogrep";
     private static final File baseDirFile = new File(BASE_DIR);
     private static final String config = "_config";
     private static final String index = "_index";
@@ -201,6 +203,15 @@ public class UserMgmt {
         Indexer.index(items, indexFile);
         this.updateLastPost(sts.get(0).getId());
         return 0;
+    }
+
+    // get newer items and update index
+    public void update() {
+        long last = getLastPost();
+        String[] token = getToken();
+        AccessToken access = new AccessToken(token[0], token[1]);
+        List<Status> userStatus = WeiboGate.getHomeTimeline(access, last);
+        addDoc(userStatus);
     }
 }
 
