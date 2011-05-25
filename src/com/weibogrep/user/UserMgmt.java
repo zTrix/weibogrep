@@ -3,6 +3,8 @@ package com.weibogrep.user;
 import java.io.*;
 import java.util.*;
 
+import org.apache.commons.logging.impl.Log4JLogger;
+
 import weibo4j.*;
 
 import com.weibogrep.indexer.*;
@@ -65,7 +67,7 @@ public class UserMgmt {
         try {
             BufferedWriter out = new BufferedWriter(
                                  new OutputStreamWriter(
-                                 new FileOutputStream(configFile)));
+                                 new FileOutputStream(lastFile)));
             out.write("" + postId);
             out.close();
         } catch (Exception e) {
@@ -173,6 +175,7 @@ public class UserMgmt {
         if (!b) return -3;
 
         // setup last file
+        lastFile = new File(userdir, last);
         try {
             b = lastFile.createNewFile();
             if (!b) {
@@ -196,6 +199,7 @@ public class UserMgmt {
             items[i++] = new IndexItem(st.getId(), st.getText(), st.getCreatedAt());
         }
         Indexer.index(items, indexFile);
+        this.updateLastPost(sts.get(0).getId());
         return 0;
     }
 }
