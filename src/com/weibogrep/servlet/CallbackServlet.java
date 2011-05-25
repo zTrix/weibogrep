@@ -35,7 +35,7 @@ public class CallbackServlet extends HttpServlet {
                 AccessToken accessToken = WebOAuth.requstAccessToken(resToken,verifier);
                 if (accessToken != null) {
                         session.setAttribute("accessToken", accessToken);
-                        response.sendRedirect("index.jsp");
+                        response.sendRedirect("search.html");
                         //String input = WeiboGate.getUserTimeline(accessToken);
                         //out.println("读取用户微博成功<br>" + input);
                 } else {
