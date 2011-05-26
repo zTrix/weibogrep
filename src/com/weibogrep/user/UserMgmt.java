@@ -227,18 +227,24 @@ public class UserMgmt {
             ZLog.err("user: " + id + " , cannot create lock file");
             return;
         }
-        long last = getLastPost();
-        String[] token = getToken();
-        AccessToken access = new AccessToken(token[0], token[1]);
-        List<Status> userStatus = WeiboGate.getHomeTimeline(access, last);
-        if (userStatus.size() > 0) {
-            ZLog.info("user: " + id + " updating, adding " + userStatus.size() + " docs");
-            addDoc(userStatus);
-            this.updateLastPost(userStatus.get(0).getId());
-        } else {
-            ZLog.info("user: " + id + " updating, no docs to update");
+        try {
+	        long last = getLastPost();
+	        String[] token = getToken();
+	        AccessToken access = new AccessToken(token[0], token[1]);
+	        List<Status> userStatus = WeiboGate.getHomeTimeline(access, last);
+	        if (userStatus.size() > 0) {
+	            ZLog.info("user: " + id + " updating, adding " + userStatus.size() + " docs");
+	            addDoc(userStatus);
+	            this.updateLastPost(userStatus.get(0).getId());
+	        } else {
+	            ZLog.info("user: " + id + " updating, no docs to update");
+	        }
+        } catch (Exception e) {
+        	ZLog.err("UserMgmt.update error");
+        	e.printStackTrace();
+        } finally {
+        	lockFile.delete();
         }
-        lockFile.delete();
     }
 }
 
