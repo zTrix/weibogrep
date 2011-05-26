@@ -81,7 +81,12 @@ public class UserMgmt {
                                  new InputStreamReader(
                                  new FileInputStream(lastFile)));
             br.readLine();
-            ret = Integer.parseInt(br.readLine());
+            String s = br.readLine();
+            if (s.length() > 0) {
+                ret = Integer.parseInt(s);
+            } else {
+                ret = 0;
+            }
             br.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -261,7 +266,10 @@ public class UserMgmt {
             
             List<Status> userStatus = WeiboGate.getHomeTimeline(access, last, page);
             int total = userStatus.size();
-            long lastId = userStatus.get(0).getId();
+            long lastId = -1;
+            if (userStatus.size() > 0) {
+                lastId = userStatus.get(0).getId();
+            }
             
             for (page = 2; userStatus.size() > 0; page++) {
                 userStatus = WeiboGate.getHomeTimeline(access, last, page);
