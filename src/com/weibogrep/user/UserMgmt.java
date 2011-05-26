@@ -71,17 +71,42 @@ public class UserMgmt {
         return indexFile;
     }
     
-    public int updateLastPost(long postId) {
+    public int getIndexNum() {
     	if (!exist()) {
     		return -1;
     	}
+    	int ret = 0;
+        try {
+            BufferedReader br = new BufferedReader(
+                                 new InputStreamReader(
+                                 new FileInputStream(lastFile)));
+            br.readLine();
+            ret = Integer.parseInt(br.readLine());
+            br.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -2;
+        }
+        return ret;
+    }
+    
+    private int updateLastPost(long postId, int num) {
+    	if (!exist()) {
+    		return -1;
+    	}
+    	int cur_num = getIndexNum();
+    	if (cur_num < 0) cur_num = 0;
+    	cur_num += num;
+    	
         try {
             BufferedWriter out = new BufferedWriter(
                                  new OutputStreamWriter(
                                  new FileOutputStream(lastFile)));
             out.write("" + postId);
+            out.newLine();
+            out.write("" + cur_num);
             out.close();
-            ZLog.info("user: " + id + " , index is updated, last id is " + postId);
+            ZLog.info("user: " + id + " , index is updated, last id is " + postId + " , total index num is " + cur_num);
         } catch (Exception e) {
             e.printStackTrace();
             return -2;
@@ -235,7 +260,7 @@ public class UserMgmt {
 	        if (userStatus.size() > 0) {
 	            ZLog.info("user: " + id + " updating, adding " + userStatus.size() + " docs");
 	            addDoc(userStatus);
-	            this.updateLastPost(userStatus.get(0).getId());
+	            this.updateLastPost(userStatus.get(0).getId(), userStatus.size());
 	        } else {
 	            ZLog.info("user: " + id + " updating, no docs to update");
 	        }
