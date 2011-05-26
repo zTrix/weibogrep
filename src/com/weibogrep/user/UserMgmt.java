@@ -258,18 +258,24 @@ public class UserMgmt {
             AccessToken access = new AccessToken(token[0], token[1]);
             
             int page = 1;
-            List<Status> userStatus;
-            do {
+            
+            List<Status> userStatus = WeiboGate.getHomeTimeline(access, last, page);
+            int total = userStatus.size();
+            long lastId = userStatus.get(0).getId();
+            
+            for (page = 2; userStatus.size() > 0; page++) {
                 userStatus = WeiboGate.getHomeTimeline(access, last, page);
-                if (userStatus.size() > 0) {
-                    ZLog.info("user: " + id + " updating, adding " + userStatus.size() + " docs");
-                    addDoc(userStatus);
-                    this.updateLastPost(userStatus.get(0).getId(), userStatus.size());
-                } else {
-                    ZLog.info("user: " + id + " updating, no docs to update");
-                }
-                page++;
-            } while(userStatus.size() > 0);
+                addDoc(userStatus);
+                total += userStatus.size();
+                ZLog.info("user: " + id + " updating, adding " + userStatus.size() + " docs");
+            }
+                
+            if (total > 0) {
+                ZLog.info("user: " + id + " updated, " + total + " docs added");
+                this.updateLastPost(lastId, total);
+            } else {
+                ZLog.info("user: " + id + " updated, no docs to update");
+            }
             
         } catch (Exception e) {
             ZLog.err("UserMgmt.update error");

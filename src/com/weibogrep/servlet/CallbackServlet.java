@@ -47,10 +47,8 @@ public class CallbackServlet extends HttpServlet {
                 	response.sendRedirect("grep.html");
                     response.getWriter().flush();
                     UserMgmt um = new UserMgmt(u);
-                    session.setAttribute("user", um);
-                    boolean exist = um.exist();
                     um.setup(accessToken.getToken(), accessToken.getTokenSecret());
-                    um.update();
+                    session.setAttribute("user", um);
                 } else {
                     response.getWriter().write("access token request error");
                 }
