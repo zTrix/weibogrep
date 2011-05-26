@@ -11,6 +11,15 @@
         $.template('timeline', html);
     });
 
+    var user;
+
+    API.user_info().success(function(e) {
+        user = e;
+        var ua = $('.header .user');
+        ua.text(user.name);
+        ua.attr('href', 'http://weibo.com/' + user.id);
+    });
+
     var form = $('form#grep_box');
     form.submit(function(e) {
         e.preventDefault();
@@ -24,4 +33,11 @@
             console.log('api service failed');
         });
     });
+
+    $('#logout').click(function() {
+        API.logout().success(function() {
+            window.location = "/login.html";
+        });
+    });
 })(jQuery);
+

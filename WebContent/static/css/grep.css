@@ -3,21 +3,38 @@ html, body {
     background-color: #E7E7E7;
 }
 
+.clear {
+    clear: both;
+}
+
 .wrapper {
     width: 1024px;
     margin: 0 auto;
 }
 
+.wrapper .header {
+    height: 50px;
+    padding-top: 10px;
+    width: 100%;
+    margin-right: 50px;
+}
+
+.wrapper .header a {
+    float: right;
+    margin-right: 10px;
+}
+
 .wrapper .title {
     font-family: 微软雅黑,sans-serif;
     font-size: 30px;
-    margin: 120px auto;
+    margin: auto;
 }
 
 .wrapper #grep_box input[type=text]{
     width: 518px;
     padding: 8px;
-    margin: 0 auto;
+    margin: 50px auto;
     font-size: 20px;
     display: block;
 }
+
