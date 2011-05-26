@@ -19,7 +19,7 @@
         API.grep({
             q: query
         }).success(function(e) {
-            $.tmpl('timeline', e.items).appendTo('ul.result');
+            $('ul.result').html($.tmpl('timeline', e.items));
         }).error(function() {
             console.log('api service failed');
         });

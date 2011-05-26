@@ -97,7 +97,17 @@ public class APIServlet extends HttpServlet {
                 } else {
                     o.put("uid", (Object)null);
                 }
-                o.write(response.getWriter()); 
+                o.write(response.getWriter());
+            } else if (paths[2].equalsIgnoreCase("user_info")) {
+                UserMgmt um = (UserMgmt) session.getAttribute("user");
+                if (um == null) {
+                    new JSONObject().put("err" , -1)
+                                    .put("msg", "user not logged in")
+                                    .write(response.getWriter());
+                } else {
+                    new JSONObject(um.getUser()).put("grep_indexing_num", um.getIndexNum())
+                                                .write(response.getWriter());
+                }
             } else if (paths[2].equalsIgnoreCase("grep")) {
                 UserMgmt um = (UserMgmt) session.getAttribute("user");
                 if (um == null) {
@@ -152,15 +162,15 @@ public class APIServlet extends HttpServlet {
                                                  );
                     HashMap[] hm = new HashMap[rs.length];
                     for (int i=0; i < rs.length; i++) {
-                    	hm[i] = new HashMap();
-                    	hm[i].put("content", rs[i]);
+                        hm[i] = new HashMap();
+                        hm[i].put("content", rs[i]);
                     }
                     new JSONObject().put("err", 0)
                                     .put("items", hm)
                                     .write(response.getWriter());
                     ZLog.info("user: " + um.getId() + " query: " + queryString);
                 } catch (Exception e){
-                	e.printStackTrace();
+                    e.printStackTrace();
                     new JSONObject().put("err",  -4)
                                     .put("msg", "internal error, grep error: " + e.getMessage())
                                     .put("exception", e)
