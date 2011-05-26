@@ -82,7 +82,7 @@ public class UserMgmt {
                                  new FileInputStream(lastFile)));
             br.readLine();
             String s = br.readLine();
-            if (s.length() > 0) {
+            if (s != null && s.length() > 0) {
                 ret = Integer.parseInt(s);
             } else {
                 ret = 0;
