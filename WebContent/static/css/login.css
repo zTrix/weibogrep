@@ -1,0 +1,25 @@
+html, body {
+    background-color: #E7E7E7;
+}
+
+.wrapper {
+    width: 1024px;
+    margin: 20px auto;
+}
+
+.wrapper .title {
+    font-family: 微软雅黑,sans-serif;
+    font-size: 30px;
+    color: #505050;
+    margin-top: 30px;
+}
+
+.wrapper img#logo {
+    background: #000000;
+    width: 500px;
+    height: 400px;
+    align:center;
+    display: block;
+    margin: 20px auto;
+}
+

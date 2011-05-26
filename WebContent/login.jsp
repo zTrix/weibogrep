@@ -17,8 +17,20 @@
 <html>
     <head>
         <title>Weibo Grep</title>
+        <link rel="stylesheet" href="/static/css/reset.css" />
+        <link rel="stylesheet" href="/static/css/login.css" />
     </head>
     <body>
-        <a href="<%=resToken.getAuthorizationURL()%>">login</a>
+        <div class="wrapper">
+            <div class="title">
+                <center>微博实时搜索</center>
+            </div>
+            <br />
+            <img src="" alt="" id="logo" />
+            <br />
+            <a href="<%=resToken.getAuthorizationURL()%>">
+                <center><img src="/static/img/oauth_login.png" /></center>
+            </a>
+        </div>
     </body>
 </html>
