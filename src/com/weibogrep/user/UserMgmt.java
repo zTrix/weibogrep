@@ -44,7 +44,7 @@ public class UserMgmt {
     }
     
     public UserMgmt(long id) {
-    	if (id < 0) return;
+        if (id < 0) return;
         this.id = id;
         userdir = new File(baseDirFile, "" + id);
         lockFile = new File(userdir, lock);
@@ -60,7 +60,7 @@ public class UserMgmt {
     }
     
     public User getUser() {
-    	return user;
+        return user;
     }
 
     public boolean exist() {
@@ -72,10 +72,10 @@ public class UserMgmt {
     }
     
     public int getIndexNum() {
-    	if (!exist()) {
-    		return -1;
-    	}
-    	int ret = 0;
+        if (!exist()) {
+            return -1;
+        }
+        int ret = 0;
         try {
             BufferedReader br = new BufferedReader(
                                  new InputStreamReader(
@@ -91,13 +91,13 @@ public class UserMgmt {
     }
     
     private int updateLastPost(long postId, int num) {
-    	if (!exist()) {
-    		return -1;
-    	}
-    	int cur_num = getIndexNum();
-    	if (cur_num < 0) cur_num = 0;
-    	cur_num += num;
-    	
+        if (!exist()) {
+            return -1;
+        }
+        int cur_num = getIndexNum();
+        if (cur_num < 0) cur_num = 0;
+        cur_num += num;
+        
         try {
             BufferedWriter out = new BufferedWriter(
                                  new OutputStreamWriter(
@@ -119,15 +119,15 @@ public class UserMgmt {
             return -1;
         }
         try {
-        	BufferedReader br = new BufferedReader(
-				                new InputStreamReader(
-				                new FileInputStream(lastFile)));
-        	String s = br.readLine();
-        	if (s.length() < 1) {
-        		return 0;
-        	} else {
-        		return Long.parseLong(s);
-        	}
+            BufferedReader br = new BufferedReader(
+                                new InputStreamReader(
+                                new FileInputStream(lastFile)));
+            String s = br.readLine();
+            if (s.length() < 1) {
+                return 0;
+            } else {
+                return Long.parseLong(s);
+            }
         } catch (Exception e) {
             return -2;
         }
@@ -163,17 +163,17 @@ public class UserMgmt {
         this.secret = secret;
 
         if (this.exist()) {         // just update token and secret
-        	try {
-	            BufferedWriter out = new BufferedWriter(
-	                                 new OutputStreamWriter(
-	                                 new FileOutputStream(configFile)));
-	            out.write(token);
-	            out.newLine();
-	            out.write(secret);
-	            out.close();
-        	} catch(Exception e) {
-        		e.printStackTrace();
-        	}
+            try {
+                BufferedWriter out = new BufferedWriter(
+                                     new OutputStreamWriter(
+                                     new FileOutputStream(configFile)));
+                out.write(token);
+                out.newLine();
+                out.write(secret);
+                out.close();
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
             return 1;
         }
 
@@ -253,22 +253,29 @@ public class UserMgmt {
             return;
         }
         try {
-	        long last = getLastPost();
-	        String[] token = getToken();
-	        AccessToken access = new AccessToken(token[0], token[1]);
-	        List<Status> userStatus = WeiboGate.getHomeTimeline(access, last);
-	        if (userStatus.size() > 0) {
-	            ZLog.info("user: " + id + " updating, adding " + userStatus.size() + " docs");
-	            addDoc(userStatus);
-	            this.updateLastPost(userStatus.get(0).getId(), userStatus.size());
-	        } else {
-	            ZLog.info("user: " + id + " updating, no docs to update");
-	        }
+            long last = getLastPost();
+            String[] token = getToken();
+            AccessToken access = new AccessToken(token[0], token[1]);
+            
+            int page = 1;
+            List<Status> userStatus;
+            do {
+                userStatus = WeiboGate.getHomeTimeline(access, last, page);
+                if (userStatus.size() > 0) {
+                    ZLog.info("user: " + id + " updating, adding " + userStatus.size() + " docs");
+                    addDoc(userStatus);
+                    this.updateLastPost(userStatus.get(0).getId(), userStatus.size());
+                } else {
+                    ZLog.info("user: " + id + " updating, no docs to update");
+                }
+                page++;
+            } while(userStatus.size() > 0);
+            
         } catch (Exception e) {
-        	ZLog.err("UserMgmt.update error");
-        	e.printStackTrace();
+            ZLog.err("UserMgmt.update error");
+            e.printStackTrace();
         } finally {
-        	lockFile.delete();
+            lockFile.delete();
         }
     }
 }

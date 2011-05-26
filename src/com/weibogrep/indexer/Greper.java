@@ -39,7 +39,7 @@ public class Greper {
     	try {
 	        Query query = parser.parse(queryStr);
 	        query = query.rewrite(reader);
-	        TopDocs hits = greper.search(query, 10);
+	        TopDocs hits = greper.search(query, 100);
 	        BoldFormatter formatter = new BoldFormatter();
 	        Highlighter highlighter = new Highlighter(formatter, new QueryScorer(query));
 	        highlighter.setTextFragmenter(new SimpleFragmenter(50));
