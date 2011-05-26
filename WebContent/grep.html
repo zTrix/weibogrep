@@ -2,19 +2,25 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Weibo Grep</title>
+        <title>微博实时搜索</title>
         <link rel="stylesheet" href="/static/css/reset.css" />
         <link rel="stylesheet" href="/static/css/grep.css" />
     </head>
     <body>
-        欢迎使用微博搜索
-        <form action="query" method="GET" accept-charset="UTF-8">
-            <input type="text" name="query" value="" maxlength="100" />
-            <input type="submit" name="submit" value="搜索" />
-        </form>
-        <script type="text/javascript" src="/static/js/jquery.js"></script>
-        <script type="text/javascript" src="/static/js/api.js"></script>
-        <script type="text/javascript" src="/static/js/grep.js" ></script>
+        <div class="wrapper">
+            <div class="title">
+                <center>微博实时搜索</center>
+            </div>
+            <form id="grep_box" method="GET" accept-charset="UTF-8">
+                <input type="text" name="query" maxlength="100" autocomplete="off"/>
+                <input type="submit" name="submit" value="搜索" />
+            </form>
+            <ul class="result"></ul>
+            <script type="text/javascript" src="/static/js/jquery.js"></script>
+            <script type="text/javascript" src="/static/js/jquery.tmpl.js"></script>
+            <script type="text/javascript" src="/static/js/api.js"></script>
+            <script type="text/javascript" src="/static/js/grep.js" ></script>
+        </div>
     </body>
 </html>
 

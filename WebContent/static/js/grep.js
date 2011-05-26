@@ -7,8 +7,21 @@
         }
     });
 
-    var form = $('form[action=query]');
-    $('input[type=submit]', form).submit(function() {
-        alert(1);
+    $.get('/tmpl/timeline_item.html').success(function(html) {
+        $.template('timeline', html);
+    });
+
+    var form = $('form#grep_box');
+    form.submit(function(e) {
+        e.preventDefault();
+        var query = $('input[type=text]', form).val();
+        console.log(query);
+        API.grep({
+            q: query
+        }).success(function(e) {
+            $.tmpl('timeline', e.items).appendTo('ul.result');
+        }).error(function() {
+            console.log('api service failed');
+        });
     });
 })(jQuery);

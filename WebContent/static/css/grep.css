@@ -1,0 +1,23 @@
+
+html, body {
+    background-color: #E7E7E7;
+}
+
+.wrapper {
+    width: 1024px;
+    margin: 0 auto;
+}
+
+.wrapper .title {
+    font-family: 微软雅黑,sans-serif;
+    font-size: 30px;
+    margin: 120px auto;
+}
+
+.wrapper #grep_box input[type=text]{
+    width: 518px;
+    padding: 8px;
+    margin: 0 auto;
+    font-size: 20px;
+    display: block;
+}

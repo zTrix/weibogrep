@@ -1,6 +1,7 @@
 package com.weibogrep.servlet;
 
 import java.io.IOException;
+import java.util.*;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
@@ -149,13 +150,20 @@ public class APIServlet extends HttpServlet {
                                                  ,(IndexReader  )session.getAttribute("reader")
                                                  ,(IndexSearcher)session.getAttribute("greper")
                                                  );
+                    HashMap[] hm = new HashMap[rs.length];
+                    for (int i=0; i < rs.length; i++) {
+                    	hm[i] = new HashMap();
+                    	hm[i].put("content", rs[i]);
+                    }
                     new JSONObject().put("err", 0)
-                                    .put("result", rs)
+                                    .put("items", hm)
                                     .write(response.getWriter());
                     ZLog.info("user: " + um.getId() + " query: " + queryString);
                 } catch (Exception e){
+                	e.printStackTrace();
                     new JSONObject().put("err",  -4)
                                     .put("msg", "internal error, grep error: " + e.getMessage())
+                                    .put("exception", e)
                                     .write(response.getWriter());
                     return;
                 }
