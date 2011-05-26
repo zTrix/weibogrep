@@ -1,6 +1,14 @@
+# require commons-httpclient
+# require weibo4j
+
 prj=`pwd`
 lib=$prj/lib
 for i in $lib/*.jar;do
+    export CLASSPATH=$CLASSPATH:$i
+done
+
+tomcat=/usr/share/tomcat7
+for i in $tomcat/lib/*.jar;do
     export CLASSPATH=$CLASSPATH:$i
 done
 

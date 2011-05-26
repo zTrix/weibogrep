@@ -1,6 +1,7 @@
 package com.weibogrep.indexer;
 
 import java.util.*;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 public class IndexItem {
     public long id = -1;
@@ -9,7 +10,7 @@ public class IndexItem {
 
     public IndexItem (long v_id, String v_content, Date v_date) {
         id = v_id;
-        content = v_content;
+        content = StringEscapeUtils.escapeHtml4(v_content);
         date = v_date;
     }
 }
