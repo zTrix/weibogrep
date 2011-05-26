@@ -34,7 +34,6 @@ public class WebOAuth {
 
     public static AccessToken requstAccessToken(RequestToken requestToken, String verifier) {
         try {
-
             Weibo weibo = new Weibo();
             AccessToken accessToken = weibo.getOAuthAccessToken(requestToken
                     .getToken(), requestToken.getTokenSecret(), verifier);

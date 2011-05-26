@@ -2,32 +2,22 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
   <display-name>Weibo Grep</display-name>
   <welcome-file-list>
-    <welcome-file>home</welcome-file>
+    <welcome-file>/public.html</welcome-file>
   </welcome-file-list>
+
   <session-config>
     <session-timeout>-1</session-timeout>
   </session-config>
 
   <servlet>
-    <description>Do Query </description>
-    <display-name>QueryServlet</display-name>
-    <servlet-name>QueryServlet</servlet-name>
-    <servlet-class>com.weibogrep.servlet.QueryServlet</servlet-class>
+    <description>API </description>
+    <display-name>APIServlet</display-name>
+    <servlet-name>APIServlet</servlet-name>
+    <servlet-class>com.weibogrep.servlet.APIServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>QueryServlet</servlet-name>
-    <url-pattern>/query</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description>home</description>
-    <display-name>HomeServlet</display-name>
-    <servlet-name>HomeServlet</servlet-name>
-    <servlet-class>com.weibogrep.servlet.HomeServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>HomeServlet</servlet-name>
-    <url-pattern>/home</url-pattern>
+    <servlet-name>APIServlet</servlet-name>
+    <url-pattern>/api/*</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -41,28 +31,6 @@
     <url-pattern>/callback</url-pattern>
   </servlet-mapping>
 
-  <servlet>
-    <description>LoginStatus</description>
-    <display-name>LoginStatusServlet</display-name>
-    <servlet-name>LoginStatusServlet</servlet-name>
-    <servlet-class>com.weibogrep.servlet.LoginStatusServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>LoginStatusServlet</servlet-name>
-    <url-pattern>/loginstatus</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description>Logout</description>
-    <display-name>LogoutServlet</display-name>
-    <servlet-name>LogoutServlet</servlet-name>
-    <servlet-class>com.weibogrep.servlet.LogoutServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>LogoutServlet</servlet-name>
-    <url-pattern>/logout</url-pattern>
-  </servlet-mapping>
-  
   <listener>
     <listener-class>com.weibogrep.servlet.StartupListener</listener-class>
   </listener>
