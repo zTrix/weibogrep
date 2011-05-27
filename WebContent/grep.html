@@ -9,17 +9,45 @@
     <body>
         <div class="wrapper">
             <div class="header">
-                <a href="javascript:;" id="logout"> 退出 </a>
+                <a href="javascript:;" id="logout"> 
+                    <img src="/static/img/lock.png"  width="10px" height="10px" />
+                    退出 
+                </a>
                 <a href="javascript:;" class="user"></a>
+                <a>
+                    <img src="/static/img/person.gif" width="15px" height="15px" />
+                </a>
             </div>
             <div class="main">
                 <div class="title">
                     <center>微博实时搜索</center>
                 </div>
-                <form id="grep_box" method="GET" accept-charset="UTF-8">
-                    <input type="text" name="query" maxlength="100" autocomplete="off"/>
-                </form>
-                <ul class="result"></ul>
+        		<div class="doccount">
+                    <div class="index">
+                        <img src="/static/img/credit.gif" width="10px" height="10px" />
+                        Indexed:
+                        <span id="indexed_num"></span>
+                        records.
+                    </div>
+		        </div>
+                <div class="searchbar">
+                    <form id="grep_box" method="GET" accept-charset="UTF-8">
+                    <div class="stype" id="stype">
+                        <select id="stype_selector">
+                            <option name="type" value="timeline">Timeline</option>
+                            <option name="type" value="friend">Friend</option>
+                            <option name="type" value="people">People</option>
+                        </select>
+                    </div>
+                        :
+                        <div id="query_box">
+                            <input type="text" name="query" maxlength="100" autocomplete="off"/>
+                        </div>
+                    </form>
+                </div>
+                <div class="rs_status" id="rs_status">Loading...</div>
+                
+                <div class="result" id="result"></div>
                 <script type="text/javascript" src="/static/js/jquery.js"></script>
                 <script type="text/javascript" src="/static/js/jquery.tmpl.js"></script>
                 <script type="text/javascript" src="/static/js/api.js"></script>

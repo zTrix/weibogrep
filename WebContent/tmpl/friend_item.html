@@ -1,22 +1,22 @@
 <div class="rs_item">
     <div class="left rs_item_left">
         <div class="face">
-            <a href=${homepage} target="_blank" ><img src=${photo} width="50px" height="50px" /></a>
+            <a href=${URL} target="_blank" ><img src=${profileImageURL} width="50px" height="50px" /></a>
         </div>
     </div>
     <div class="right rs_item_main">
         <div>
-            <a class="username" href=${homepage} target="_blank">${username}</a>
-            <span class="replynum">
-                {{= replyNum}}
+            <a class="username" href="http://weibo.com/${id}" target="_blank">${name}(@${screenName})</a>
+            <span class="location">
+                {{= location}}
             </span>
             <span class="time">
                 <img src="/static/img/time.gif" width="14px" height="14px" />
-                ${$item.getDate(date)}
+                Join@ ${$item.getDate(createAt)} 
             </span>
         </div>
         <div class="content">
-            {{html content}}
+            {{= statusText}}
         </div>
 
     </div>

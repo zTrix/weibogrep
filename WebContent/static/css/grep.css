@@ -1,10 +1,18 @@
 
 html, body {
-    background-color: #E7E7E7;
+    background-color: #fff;
 }
 
 .clear {
     clear: both;
+}
+
+.left {
+    float:left;
+}
+
+.right {
+    float:right;
 }
 
 .wrapper {
@@ -29,12 +37,115 @@ html, body {
     font-size: 30px;
     margin: auto;
 }
+.wrapper .searchbar{
+    margin:50px auto;
+    width:600px;
+}
+.wrapper #stype {
+    width:80px;
+    display:inline;
+    vertical-align:baseline;
+}
+
+.wrapper #query_box {
+    display:inline;
+    vertical-align:baseline;
+}
+
+.wrapper #stype_selector {
+    display:inline;
+    vertical-align:baseline;
+}
 
 .wrapper #grep_box input[type=text]{
-    width: 518px;
+    -webkit-border-radius:8px;
+    width: 418px;
     padding: 8px;
-    margin: 50px auto;
     font-size: 20px;
-    display: block;
+    display:inline;
+    vertical-align:baseline;
+}
+
+.wrapper .doccount {
+    width:518px;
+    margin-top:10px;
+    font-size:14px;
+}
+
+.wrapper .doccount .index{
+    float:right;
+    margin-right:-240px;
+    margin-bottom:-10px;
+}
+
+
+.wrapper #indexed_num {
+    font-weight:bold;
+}
+
+.wrapper .rs_status{
+    font-size:10px;
+    color:#fff;
+    text-align:center;
+    background-color:#373737;
+    -webkit-border-radius:5px;
+    width:518px;
+    margin:0 auto;
+    margin-top:-15px;
+    line-height:1.4;
+    height:24px;
+    vertical-align:baseline;
+    padding-top:5px;
+}
+
+.wrapper .rs_item_mouseenter {
+    border-left:solid 3px #ccc;
+}
+
+.wrapper .rs_item {
+    min-height:70px;
+    width:518px;
+    margin:10px auto;
+    position:relative;
+    overflow:hidden;
+}
+
+.wrapper .rs_item .rs_item_left {
+    margin-left:5px;
+    margin-right:10px;
+}
+
+.wrapper .rs_item .rs_item_main {
+    width:450px;    
+    margin-bottom:20px;
+}
+
+.wrapper .rs_item .content {
+    font-size:12px;
+    margin-top:9px;
+}
+
+.wrapper .rs_item .time {
+    font-size:12px;
+    float:right;
+}
+
+.wrapper .rs_item .replyNum {
+    font-size:12px;
+}
+
+.wrapper .rs_item .content b {
+    background-color:#FF8;
+}
+
+.wrapper .rs_item .username {
+    font-size:14px;
+    font-weight:bold;
+    margin-right:20px;
+    color:#457f01;
+}
+
+.wrapper .rs_item .location {
+    font-size:12px;
 }
 
