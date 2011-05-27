@@ -60,13 +60,14 @@ public class WeiboGate {
         return statuses;
     }
     
-    public static List<User> getFriends(AccessToken access) {
+    public static List<User> getFriends(AccessToken access, int page) {
         Weibo wb = new Weibo();
         wb.setToken(access.getToken(), access.getTokenSecret());
         List<User> ret;
+        Paging pg = new Paging(page, 200);
         try {
-            ret = wb.getFriendsStatuses();
-            ret.addAll(wb.getFollowersStatuses());
+            ret = wb.getFriendsStatuses(pg);
+            ret.addAll(wb.getFollowersStatuses(pg));
         } catch (WeiboException e) {
             e.printStackTrace();
             return null;

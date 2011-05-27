@@ -8,5 +8,5 @@ public class FriendItem {
     public String location;
     public String statusText;
     public long id;
-    public long createAt;
+    public long createdAt;
 }

@@ -18,12 +18,14 @@ public class UserMgmt {
     private static final File baseDirFile = new File(BASE_DIR);
     private static final String config = "_config";
     private static final String index = "_index";
+    private static final String friendIndex = "_friendIndex";
     private static final String last = "_last";     // last timeline
     private static final String lock = "_lock";     // prevent update chaos
 
     private File userdir;
     private File configFile;
     private File indexFile;
+    private File friendIndexFile;
     private File lastFile;
     private File lockFile;
     private User user;
@@ -40,6 +42,7 @@ public class UserMgmt {
         if (exist()) {
             configFile = new File(userdir, config);
             indexFile = new File(userdir, index);
+            friendIndexFile = new File(userdir, friendIndex);
             lastFile = new File(userdir, last);
         }
     }
@@ -52,6 +55,7 @@ public class UserMgmt {
         if (exist()) {
             configFile = new File(userdir, config);
             indexFile = new File(userdir, index);
+            friendIndexFile = new File(userdir, friendIndex);
             lastFile = new File(userdir, last);
         }
     }
@@ -70,6 +74,10 @@ public class UserMgmt {
 
     public File getIndexDir() {
         return indexFile;
+    }
+
+    public File getFriendIndexDir() {
+        return friendIndexFile;
     }
     
     public int getIndexNum() {
@@ -165,13 +173,10 @@ public class UserMgmt {
     }
 
     public void updateFriends() {
-        List<User> friends = WeiboGate.getFriends(new AccessToken(token, secret));
-        FriendItem [] items = new FriendItem[friends.size()];
-        int i = 0;
-        for (User f: friends) {
-            FriendItem fi = new FriendItem();
-            items[i++] = fi;
-        }
+        String[] token = getToken();
+        AccessToken access = new AccessToken(token[0], token[1]);
+        List<User> friends = WeiboGate.getFriends(access, 1);
+        addFriendDoc(friends);
     }
 
     public int setup(String token, String secret) {
@@ -227,6 +232,11 @@ public class UserMgmt {
         b = indexFile.mkdir();
         if (!b) return -3;
 
+        // setup friend index dir
+        friendIndexFile = new File(userdir, friendIndex);
+        b = friendIndexFile.mkdir();
+        if (!b) return -5;
+
         // setup last file
         lastFile = new File(userdir, last);
         try {
@@ -264,6 +274,28 @@ public class UserMgmt {
             items[i++] = ii;
         }
         Indexer.index(items, indexFile);
+        return 0;
+    }
+
+    private int addFriendDoc(List<User> users) {
+        if (friendIndexFile == null) {
+            return -1;
+        }
+        FriendItem[] items = new FriendItem[users.size()];
+        int i = 0;
+        for (User u: users) {
+            FriendItem fi  = new FriendItem();
+            fi.name = u.getName();
+            fi.id = u.getId();
+            fi.location = u.getLocation();
+            fi.profileImageURL = u.getProfileBackgroundImageUrl();
+            fi.screenName = u.getScreenName();
+            fi.URL = u.getURL().toString();
+            fi.statusText = u.getStatusText();
+            fi.createdAt = u.getCreatedAt().getTime();
+            items[i++] = fi;
+        }
+        Indexer.indexFriends(items, friendIndexFile);
         return 0;
     }
 
