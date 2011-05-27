@@ -19,6 +19,13 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
 
 public class Indexer {
+    public static final String FIELD_ID = "id";
+    public static final String FIELD_USERNAME = "username";
+    public static final String FIELD_REPLY_NUM = "replyNum";
+    public static final String FIELD_CONTENT = "content";
+    public static final String FIELD_DATE = "date";
+    public static final String FIELD_PHOTO = "photo";
+    public static final String FIELD_HOMEPAGE = "homepage";
 
     public static void index(IndexItem[] items, File indexDir) {
         try {
@@ -26,12 +33,43 @@ public class Indexer {
             IndexWriter indexWriter = new IndexWriter(FSDirectory.open(indexDir), analyzer, MaxFieldLength.UNLIMITED);
 
             for (int i = 0; i < items.length; i++) {
-                Document document = new Document();   
-                // Field keyword = Field.Keyword("date", items[i].date);
-                Field keyword = new Field("date", "" + items[i].date, Field.Store.YES, Field.Index.NO);
-                Field body = new Field("content", items[i].content, Field.Store.YES,  Field.Index.ANALYZED,  Field.TermVector.WITH_POSITIONS_OFFSETS);
-                document.add(keyword);
-                document.add(body);
+                Document document = new Document();
+                Field id       = new Field(FIELD_ID
+                                          ,"" + items[i].id
+                                          ,Field.Store.YES
+                                          ,Field.Index.NO);
+                Field username = new Field(FIELD_USERNAME
+                                          ,items[i].username
+                                          ,Field.Store.YES
+                                          ,Field.Index.NO);
+                Field replyNum = new Field(FIELD_REPLY_NUM
+                                          ,"" + items[i].replyNum
+                                          ,Field.Store.YES
+                                          ,Field.Index.NO);
+                Field date     = new Field(FIELD_DATE
+                                          ,"" + items[i].date.getTime()
+                                          ,Field.Store.YES
+                                          ,Field.Index.NO);
+                Field photo    = new Field(FIELD_PHOTO
+                                          ,items[i].photo.toString()
+                                          ,Field.Store.YES
+                                          ,Field.Index.NO);
+                Field homepage = new Field(FIELD_HOMEPAGE
+                                          ,items[i].homepage.toString()
+                                          ,Field.Store.YES
+                                          ,Field.Index.NO);
+                Field content  = new Field(FIELD_CONTENT
+                                          ,items[i].content
+                                          ,Field.Store.YES
+                                          ,Field.Index.ANALYZED
+                                          ,Field.TermVector.WITH_POSITIONS_OFFSETS);
+                document.add(id);
+                document.add(photo);
+                document.add(homepage);
+                document.add(username);
+                document.add(replyNum);
+                document.add(date);
+                document.add(content);
                 indexWriter.addDocument(document);
             }
 

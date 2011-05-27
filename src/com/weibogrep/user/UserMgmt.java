@@ -1,6 +1,7 @@
 package com.weibogrep.user;
 
 import java.io.*;
+import java.net.URL;
 import java.util.*;
 
 import org.apache.commons.logging.impl.Log4JLogger;
@@ -238,7 +239,19 @@ public class UserMgmt {
         IndexItem [] items = new IndexItem[sts.size()];
         int i = 0;
         for (Status st: sts) {
-            items[i++] = new IndexItem(st.getId(), st.getText(), st.getCreatedAt());
+            IndexItem ii = new IndexItem(st.getId(), st.getText(), st.getCreatedAt());
+            ii.username = st.getUser().getName();
+            ii.replyNum = st.getInReplyToUserId();
+            ii.photo = st.getUser().getProfileImageURL();
+            ii.homepage = st.getUser().getURL();
+            if (ii.homepage == null) {
+                try {
+                    ii.homepage = new URL("http://weibo.com/" + st.getUser().getId());
+                } catch (Exception e) {
+                    
+                }
+            }
+            items[i++] = ii;
         }
         Indexer.index(items, indexFile);
         return 0;
@@ -269,6 +282,7 @@ public class UserMgmt {
             long lastId = -1;
             if (userStatus.size() > 0) {
                 lastId = userStatus.get(0).getId();
+                addDoc(userStatus);
             }
             
             for (page = 2; userStatus.size() > 0; page++) {

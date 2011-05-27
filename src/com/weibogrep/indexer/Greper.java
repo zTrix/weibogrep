@@ -1,6 +1,9 @@
 package com.weibogrep.indexer;
 
 import java.io.File;
+import java.net.URL;
+import java.text.DateFormat;
+import java.util.Date;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.IndexReader;
@@ -35,33 +38,40 @@ public class Greper {
         assert(indexDir != null);
     }
 
-    public String[] grep(QueryParser parser, IndexReader reader, IndexSearcher greper) {
-    	try {
-	        Query query = parser.parse(queryStr);
-	        query = query.rewrite(reader);
-	        TopDocs hits = greper.search(query, 100);
-	        BoldFormatter formatter = new BoldFormatter();
-	        Highlighter highlighter = new Highlighter(formatter, new QueryScorer(query));
-	        highlighter.setTextFragmenter(new SimpleFragmenter(50));
-	        String[] ret = new String[hits.scoreDocs.length];
-	        for (int i = 0; i < hits.scoreDocs.length; i++) {
-	            int docId = hits.scoreDocs[i].doc;
-	            Document hit = greper.doc(docId);
-	            String text = hit.get("content");
-	            int maxNumFragmentsRequired = 5;
-	            String fragmentSeparator = "...";
-	            TermPositionVector tpv = (TermPositionVector) reader.getTermFreqVector(docId, "content");
-	            TokenStream tokenStream = TokenSources.getTokenStream(tpv);
-	            ret[i] = highlighter.getBestFragments(tokenStream, 
-	                                                  text, 
-	                                                  maxNumFragmentsRequired, 
-	                                                  fragmentSeparator);
-	        }
-	        return ret;
-    	} catch (Exception e) {
-    		e.printStackTrace();
-    		ZLog.err(e.toString());
-    		return null;
-    	}
+    public IndexItem[] grep(QueryParser parser, IndexReader reader, IndexSearcher greper) {
+        try {
+            Query query = parser.parse(queryStr);
+            query = query.rewrite(reader);
+            TopDocs hits = greper.search(query, 100);
+            BoldFormatter formatter = new BoldFormatter();
+            Highlighter highlighter = new Highlighter(formatter, new QueryScorer(query));
+            highlighter.setTextFragmenter(new SimpleFragmenter(50));
+            IndexItem[] ret = new IndexItem[hits.scoreDocs.length];
+            for (int i = 0; i < hits.scoreDocs.length; i++) {
+                ret[i] = new IndexItem();
+                int docId = hits.scoreDocs[i].doc;
+                Document hit = greper.doc(docId);
+                String text = hit.get(Indexer.FIELD_CONTENT);
+                int maxNumFragmentsRequired = 5;
+                String fragmentSeparator = "...";
+                TermPositionVector tpv = (TermPositionVector) reader.getTermFreqVector(docId, "content");
+                TokenStream tokenStream = TokenSources.getTokenStream(tpv);
+                ret[i].content = highlighter.getBestFragments(tokenStream, 
+                                                      text, 
+                                                      maxNumFragmentsRequired, 
+                                                      fragmentSeparator);
+                ret[i].id = Long.parseLong(hit.get(Indexer.FIELD_ID));
+                ret[i].date = new Date(Long.parseLong(hit.get(Indexer.FIELD_DATE)));
+                ret[i].username = hit.get(Indexer.FIELD_USERNAME);
+                ret[i].replyNum = Integer.parseInt(hit.get(Indexer.FIELD_REPLY_NUM));
+                ret[i].photo = new URL(hit.get(Indexer.FIELD_PHOTO));
+                ret[i].homepage = new URL(hit.get(Indexer.FIELD_HOMEPAGE));
+            }
+            return ret;
+        } catch (Exception e) {
+            e.printStackTrace();
+            ZLog.err(e.toString());
+            return null;
+        }
     }
 }

@@ -124,23 +124,27 @@ public class APIServlet extends HttpServlet {
                     return;
                 }
                 try {
-                    if (session.getAttribute("reader") == null) {
+                    boolean needUpdate = false;
+                    if (session.getAttribute("lastIndex") == null) {
+                        session.setAttribute("lastIndex", new Long(um.getLastPost()));
+                        needUpdate = true;
+                    } else {
+                        Long lastIndex = (Long)session.getAttribute("lastIndex");
+                        if (lastIndex.compareTo((Long)um.getLastPost()) != 0) {
+                            needUpdate = true;
+                        }
+                    }
+                    if (needUpdate) {
                         session.setAttribute("reader"
                                             ,IndexReader.open(
                                                  FSDirectory.open(um.getIndexDir())
                                              )
                         );
-                    }
-
-                    if (session.getAttribute("greper") == null) {
                         session.setAttribute("greper"
                                             ,new IndexSearcher(
                                                 FSDirectory.open(um.getIndexDir())
                                             )
                         );
-                    }
-
-                    if (session.getAttribute("parser") == null) {
                         session.setAttribute("parser"
                                             ,new QueryParser(Version.LUCENE_CURRENT
                                                             ,"content"
@@ -155,18 +159,23 @@ public class APIServlet extends HttpServlet {
                     return;
                 }
                 try {
-                    String[] rs = new Greper(queryString, um.getIndexDir())
+                    IndexItem[] rs = new Greper(queryString, um.getIndexDir())
                                             .grep((QueryParser  )session.getAttribute("parser")
                                                  ,(IndexReader  )session.getAttribute("reader")
                                                  ,(IndexSearcher)session.getAttribute("greper")
                                                  );
-                    HashMap[] hm = new HashMap[rs.length];
-                    for (int i=0; i < rs.length; i++) {
-                        hm[i] = new HashMap();
-                        hm[i].put("content", rs[i]);
+                    JSONObject [] items = new JSONObject[rs.length];
+                    for (int i = 0; i < rs.length; i++) {
+                        items[i] = new JSONObject().put("content", rs[i].content)
+                                                   .put("username", rs[i].username)
+                                                   .put("date", rs[i].date)
+                                                   .put("id", rs[i].id)
+                                                   .put("homepage", rs[i].homepage)
+                                                   .put("replyNum", rs[i].replyNum)
+                                                   .put("photo", rs[i].photo);
                     }
                     new JSONObject().put("err", 0)
-                                    .put("items", hm)
+                                    .put("items", items)
                                     .write(response.getWriter());
                     ZLog.info("user: " + um.getId() + " query: " + queryString);
                 } catch (Exception e){
