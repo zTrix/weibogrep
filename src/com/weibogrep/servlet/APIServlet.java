@@ -185,6 +185,8 @@ public class APIServlet extends HttpServlet {
                     }
                     new JSONObject().put("err", 0)
                                     .put("items", items)
+                                    .put("newerthan", rs[0].date)
+                                    .put("type", "timeline")
                                     .write(response.getWriter());
                     ZLog.info("user: " + um.getId() + " query: " + queryString);
                 } catch (Exception e){
