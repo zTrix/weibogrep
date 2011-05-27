@@ -9,7 +9,7 @@ public class IndexItem {
     public String content = "";
     public long date = -1;
     public String username = "";
-    public int replyNum = 0;
+    public long replyNum = 0;
     public URL photo;
     public URL homepage;
 

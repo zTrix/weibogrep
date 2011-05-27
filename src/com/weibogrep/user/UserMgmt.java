@@ -164,6 +164,16 @@ public class UserMgmt {
         return ret;
     }
 
+    public void updateFriends() {
+        List<User> friends = WeiboGate.getFriends(new AccessToken(token, secret));
+        FriendItem [] items = new FriendItem[friends.size()];
+        int i = 0;
+        for (User f: friends) {
+            FriendItem fi = new FriendItem();
+            items[i++] = fi;
+        }
+    }
+
     public int setup(String token, String secret) {
         this.token = token;
         this.secret = secret;
@@ -241,7 +251,7 @@ public class UserMgmt {
         for (Status st: sts) {
             IndexItem ii = new IndexItem(st.getId(), st.getText(), st.getCreatedAt().getTime());
             ii.username = st.getUser().getName();
-            ii.replyNum = st.getInReplyToUserId();
+            ii.replyNum = st.getInReplyToStatusId();
             ii.photo = st.getUser().getProfileImageURL();
             ii.homepage = st.getUser().getURL();
             if (ii.homepage == null) {

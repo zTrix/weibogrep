@@ -47,7 +47,7 @@ public class WeiboGate {
     }
 
     public static List<Status> getHomeTimeline(AccessToken access, long since, int page) {
-    	Weibo wb = new Weibo();
+        Weibo wb = new Weibo();
         wb.setToken(access.getToken(), access.getTokenSecret());
         List<Status> statuses;
         Paging pg = since > 0 ? new Paging(page, 200, since) : new Paging(page, 200);
@@ -58,6 +58,20 @@ public class WeiboGate {
             return null;
         }
         return statuses;
+    }
+    
+    public static List<User> getFriends(AccessToken access) {
+        Weibo wb = new Weibo();
+        wb.setToken(access.getToken(), access.getTokenSecret());
+        List<User> ret;
+        try {
+            ret = wb.getFriendsStatuses();
+            ret.addAll(wb.getFollowersStatuses());
+        } catch (WeiboException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return ret;
     }
 }
 

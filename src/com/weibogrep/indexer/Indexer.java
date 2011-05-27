@@ -51,7 +51,7 @@ public class Indexer {
                 Field date     = new Field(FIELD_DATE
                                           ,"" + items[i].date
                                           ,Field.Store.YES
-                                          ,Field.Index.NO);
+                                          ,Field.Index.NOT_ANALYZED);
                 Field photo    = new Field(FIELD_PHOTO
                                           ,items[i].photo.toString()
                                           ,Field.Store.YES

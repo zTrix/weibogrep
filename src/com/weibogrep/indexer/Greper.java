@@ -45,7 +45,7 @@ public class Greper {
             Query query = parser.parse(queryStr);
             query = query.rewrite(reader);
             Sort sort = new Sort(new SortField(Indexer.FIELD_DATE, SortField.LONG, true));
-            TopDocs hits = greper.search(query, null, 100, sort);
+            TopDocs hits = greper.search(query, null, 10000, sort);
             BoldFormatter formatter = new BoldFormatter();
             Highlighter highlighter = new Highlighter(formatter, new QueryScorer(query));
             highlighter.setTextFragmenter(new SimpleFragmenter(50));
@@ -66,7 +66,7 @@ public class Greper {
                 ret[i].id = Long.parseLong(hit.get(Indexer.FIELD_ID));
                 ret[i].date = Long.parseLong(hit.get(Indexer.FIELD_DATE));
                 ret[i].username = hit.get(Indexer.FIELD_USERNAME);
-                ret[i].replyNum = Integer.parseInt(hit.get(Indexer.FIELD_REPLY_NUM));
+                ret[i].replyNum = Long.parseLong(hit.get(Indexer.FIELD_REPLY_NUM));
                 ret[i].photo = new URL(hit.get(Indexer.FIELD_PHOTO));
                 ret[i].homepage = new URL(hit.get(Indexer.FIELD_HOMEPAGE));
             }

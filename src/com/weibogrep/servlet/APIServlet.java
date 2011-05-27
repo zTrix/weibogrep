@@ -123,78 +123,96 @@ public class APIServlet extends HttpServlet {
                                     .write(response.getWriter());
                     return;
                 }
-                try {
-                    boolean needUpdate = false;
-                    if (session.getAttribute("lastIndex") == null) {
-                        session.setAttribute("lastIndex", new Long(um.getLastPost()));
-                        needUpdate = true;
-                    } else {
-                        Long lastIndex = (Long)session.getAttribute("lastIndex");
-                        if (lastIndex.compareTo((Long)um.getLastPost()) != 0) {
+                String queryType = request.getParameter("type");
+                if (queryType == null || queryType.equalsIgnoreCase("timeline")) {
+                    try {
+                        boolean needUpdate = false;
+                        if (session.getAttribute("lastIndex") == null) {
+                            session.setAttribute("lastIndex", new Long(um.getLastPost()));
                             needUpdate = true;
+                        } else {
+                            Long lastIndex = (Long)session.getAttribute("lastIndex");
+                            if (lastIndex.compareTo((Long)um.getLastPost()) != 0) {
+                                needUpdate = true;
+                            }
                         }
+                        if (needUpdate) {
+                            session.setAttribute("reader"
+                                                ,IndexReader.open(
+                                                     FSDirectory.open(um.getIndexDir())
+                                                 )
+                            );
+                            session.setAttribute("greper"
+                                                ,new IndexSearcher(
+                                                    FSDirectory.open(um.getIndexDir())
+                                                )
+                            );
+                            session.setAttribute("parser"
+                                                ,new QueryParser(Version.LUCENE_CURRENT
+                                                                ,"content"
+                                                                , new PaodingAnalyzer()
+                                                                )
+                            );
+                            ZLog.info("indexer in session updated");
+                        }
+                    } catch (Exception e) {
+                        new JSONObject().put("err",  -3)
+                                        .put("msg", "internal error, cannot create greper: " + e.getMessage())
+                                        .write(response.getWriter());
+                        return;
                     }
-                    if (needUpdate) {
-                        session.setAttribute("reader"
-                                            ,IndexReader.open(
-                                                 FSDirectory.open(um.getIndexDir())
-                                             )
-                        );
-                        session.setAttribute("greper"
-                                            ,new IndexSearcher(
-                                                FSDirectory.open(um.getIndexDir())
-                                            )
-                        );
-                        session.setAttribute("parser"
-                                            ,new QueryParser(Version.LUCENE_CURRENT
-                                                            ,"content"
-                                                            , new PaodingAnalyzer()
-                                                            )
-                        );
+                    try {
+                        IndexItem[] rs = new Greper(queryString, um.getIndexDir())
+                                                .grep((QueryParser  )session.getAttribute("parser")
+                                                     ,(IndexReader  )session.getAttribute("reader")
+                                                     ,(IndexSearcher)session.getAttribute("greper")
+                                                     );
+                        ArrayList<JSONObject> items = new ArrayList<JSONObject>();
+                        long newerthan = -1;
+                        try {
+                            newerthan = Long.parseLong(request.getParameter("newerthan"));
+                        } catch (Exception e) {
+                            newerthan = -1;
+                        }
+                        long newerthanTosend = -1;
+                        if (rs != null) {
+	                        for (int i = 0; i < rs.length; i++) {
+	                            if (newerthan <= 0 || rs[i].date > newerthan) {
+	                                items.add( new JSONObject().put("content", rs[i].content)
+	                                                           .put("username", rs[i].username)
+	                                                           .put("date", rs[i].date)
+	                                                           .put("id", rs[i].id)
+	                                                           .put("homepage", rs[i].homepage)
+	                                                           .put("replyNum", rs[i].replyNum)
+	                                                           .put("photo", rs[i].photo)
+	                                );
+	                                if (rs[i].date > newerthanTosend) {
+	                                	newerthanTosend = rs[i].date;
+	                                }
+	                            }
+	                        }
+                        }
+                        if (newerthanTosend < 0) {
+                        	newerthanTosend = newerthan;
+                        }
+                        new JSONObject().put("err", 0)
+                                        .put("items", items)
+                                        .put("newerthan", newerthanTosend)
+                                        .put("type", "timeline")
+                                        .write(response.getWriter());
+                        ZLog.info("user: " + um.getId() + " query: " + queryString);
+                    } catch (Exception e){
+                        e.printStackTrace();
+                        new JSONObject().put("err",  -4)
+                                        .put("msg", "internal error, grep error: " + e.getMessage())
+                                        .put("exception", e)
+                                        .write(response.getWriter());
+                        return;
                     }
-                } catch (Exception e) {
-                    new JSONObject().put("err",  -3)
-                                    .put("msg", "internal error, cannot create greper: " + e.getMessage())
-                                    .write(response.getWriter());
                     return;
                 }
-                try {
-                    IndexItem[] rs = new Greper(queryString, um.getIndexDir())
-                                            .grep((QueryParser  )session.getAttribute("parser")
-                                                 ,(IndexReader  )session.getAttribute("reader")
-                                                 ,(IndexSearcher)session.getAttribute("greper")
-                                                 );
-                    ArrayList<JSONObject> items = new ArrayList<JSONObject>();
-                    long newerthan = -1;
-                    try {
-                        newerthan = Long.parseLong(request.getParameter("newerthan"));
-                    } catch (Exception e) {
-                        newerthan = -1;
-                    }
-                    for (int i = 0; i < rs.length; i++) {
-                        if (newerthan <= 0 || rs[i].date > newerthan) {
-                            items.add( new JSONObject().put("content", rs[i].content)
-                                                       .put("username", rs[i].username)
-                                                       .put("date", rs[i].date)
-                                                       .put("id", rs[i].id)
-                                                       .put("homepage", rs[i].homepage)
-                                                       .put("replyNum", rs[i].replyNum)
-                                                       .put("photo", rs[i].photo)
-                            );
-                        }
-                    }
-                    new JSONObject().put("err", 0)
-                                    .put("items", items)
-                                    .put("newerthan", rs[0].date)
-                                    .put("type", "timeline")
-                                    .write(response.getWriter());
-                    ZLog.info("user: " + um.getId() + " query: " + queryString);
-                } catch (Exception e){
-                    e.printStackTrace();
-                    new JSONObject().put("err",  -4)
-                                    .put("msg", "internal error, grep error: " + e.getMessage())
-                                    .put("exception", e)
-                                    .write(response.getWriter());
+                if (queryType.equalsIgnoreCase("friend")) {
+                    // json service for type: friend
                     return;
                 }
             } else {
