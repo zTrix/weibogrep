@@ -19,6 +19,7 @@ public class Updater {
                     UserMgmt um = new UserMgmt(uid);
                     ZLog.info("updating " + uid + " , last post id is " + um.getLastPost());
                     um.update();
+                    //um.updateFriends();
                 } catch (Exception e) {
                     ZLog.err("updating " + files[i].getName() + " error");
                     e.printStackTrace();

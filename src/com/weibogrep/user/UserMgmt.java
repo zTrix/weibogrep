@@ -236,6 +236,7 @@ public class UserMgmt {
         friendIndexFile = new File(userdir, friendIndex);
         b = friendIndexFile.mkdir();
         if (!b) return -5;
+        updateFriends();
 
         // setup last file
         lastFile = new File(userdir, last);
@@ -281,17 +282,26 @@ public class UserMgmt {
         if (friendIndexFile == null) {
             return -1;
         }
+        if (users == null) {
+            ZLog.err("addFriendDoc users = null");
+            return -2;
+        }
         FriendItem[] items = new FriendItem[users.size()];
         int i = 0;
         for (User u: users) {
             FriendItem fi  = new FriendItem();
             fi.name = u.getName();
+            if (fi.name == null) fi.name = "";
             fi.id = u.getId();
             fi.location = u.getLocation();
-            fi.profileImageURL = u.getProfileBackgroundImageUrl();
+            if (fi.location == null) fi.location = "";
+            fi.profileImageURL = u.getProfileImageURL().toString();
+            if (fi.profileImageURL == null) fi.profileImageURL = "_";
             fi.screenName = u.getScreenName();
-            fi.URL = u.getURL().toString();
+            if (fi.screenName == null) fi.screenName = "空";
+            fi.URL = "http://weibo.com/" + fi.id;
             fi.statusText = u.getStatusText();
+            if (fi.statusText == null) fi.statusText = "";
             fi.createdAt = u.getCreatedAt().getTime();
             items[i++] = fi;
         }
@@ -326,14 +336,14 @@ public class UserMgmt {
                 lastId = userStatus.get(0).getId();
                 addDoc(userStatus);
             }
-            
+            /*
             for (page = 2; userStatus.size() > 0; page++) {
                 userStatus = WeiboGate.getHomeTimeline(access, last, page);
                 addDoc(userStatus);
                 total += userStatus.size();
                 ZLog.info("user: " + id + " updating, adding " + userStatus.size() + " docs");
             }
-                
+            */    
             if (total > 0) {
                 ZLog.info("user: " + id + " updated, " + total + " docs added");
                 this.updateLastPost(lastId, total);

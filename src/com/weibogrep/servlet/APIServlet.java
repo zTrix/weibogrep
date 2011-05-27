@@ -98,6 +98,18 @@ public class APIServlet extends HttpServlet {
                     o.put("uid", (Object)null);
                 }
                 o.write(response.getWriter());
+            } else if (paths[2].equalsIgnoreCase("update")) {
+                UserMgmt um = (UserMgmt) session.getAttribute("user");
+                if (um == null) {
+                    new JSONObject().put("err" , -1)
+                                    .put("msg", "user not logged in")
+                                    .write(response.getWriter());
+                    return;
+                } 
+                um.update();
+                new JSONObject().put("err" , 0)
+                                .put("msg", "update finished")
+                                .write(response.getWriter());
             } else if (paths[2].equalsIgnoreCase("user_info")) {
                 UserMgmt um = (UserMgmt) session.getAttribute("user");
                 if (um == null) {
@@ -213,6 +225,67 @@ public class APIServlet extends HttpServlet {
                 }
                 if (queryType.equalsIgnoreCase("friend")) {
                     // json service for type: friend
+                    try {
+                        boolean needUpdate = false;
+                        if (session.getAttribute("friendReader") == null) {
+                            needUpdate = true;
+                        }
+                        if (needUpdate) {
+                            session.setAttribute("friendReader"
+                                                ,IndexReader.open(
+                                                     FSDirectory.open(um.getFriendIndexDir())
+                                                 )
+                            );
+                            session.setAttribute("friendGreper"
+                                                ,new IndexSearcher(
+                                                    FSDirectory.open(um.getFriendIndexDir())
+                                                )
+                            );
+                            session.setAttribute("friendParser"
+                                                ,new QueryParser(Version.LUCENE_CURRENT
+                                                                ,"screenName"
+                                                                , new PaodingAnalyzer()
+                                                                )
+                            );
+                        }
+                    } catch (Exception e) {
+                        new JSONObject().put("err",  -3)
+                                        .put("msg", "internal error, cannot create greper: " + e.getMessage())
+                                        .write(response.getWriter());
+                        return;
+                    }
+                    try {
+                        FriendItem[] rs = new Greper(queryString, um.getFriendIndexDir())
+                                          .grepFriend((QueryParser  )session.getAttribute("friendParser")
+                                                     ,(IndexReader  )session.getAttribute("friendReader")
+                                                     ,(IndexSearcher)session.getAttribute("friendGreper")
+                                                     );
+                        ArrayList<JSONObject> items = new ArrayList<JSONObject>();
+                        if (rs != null) {
+	                        for (int i = 0; i < rs.length; i++) {
+                                items.add( new JSONObject().put("name", rs[i].name)
+                                                           .put("screenName", rs[i].screenName)
+                                                           .put("createdAt", rs[i].createdAt)
+                                                           .put("id", rs[i].id)
+                                                           .put("URL", rs[i].URL)
+                                                           .put("profileImageURL", rs[i].profileImageURL)
+                                                           .put("statusText", rs[i].statusText)
+                                                           .put("location", rs[i].location)
+                                );
+	                        }
+                        }
+                        new JSONObject().put("err", 0)
+                                        .put("items", items)
+                                        .put("type", "friend")
+                                        .write(response.getWriter());
+                    } catch (Exception e){
+                        e.printStackTrace();
+                        new JSONObject().put("err",  -4)
+                                        .put("msg", "internal error, grep error: " + e.getMessage())
+                                        .put("exception", e)
+                                        .write(response.getWriter());
+                        return;
+                    }
                     return;
                 }
             } else {

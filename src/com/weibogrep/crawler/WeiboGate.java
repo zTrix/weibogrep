@@ -64,10 +64,10 @@ public class WeiboGate {
         Weibo wb = new Weibo();
         wb.setToken(access.getToken(), access.getTokenSecret());
         List<User> ret;
-        Paging pg = new Paging(page, 200);
+        Paging pg = new Paging(page, 20);
         try {
-            ret = wb.getFriendsStatuses(pg);
-            ret.addAll(wb.getFollowersStatuses(pg));
+            ret = wb.getFriendsStatuses();
+            ret.addAll(wb.getFollowersStatuses());
         } catch (WeiboException e) {
             e.printStackTrace();
             return null;
