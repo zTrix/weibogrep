@@ -23,6 +23,7 @@ import com.weibogrep.util.ZLog;
 public class Indexer {
     public static final String FIELD_ID = "id";
     public static final String FIELD_USERNAME = "username";
+    public static final String FIELD_NAME = "name";
     public static final String FIELD_SCREEN_NAME = "screenName";
     public static final String FIELD_REPLY_NUM = "replyNum";
     public static final String FIELD_CONTENT = "content";
@@ -33,6 +34,7 @@ public class Indexer {
     public static final String FIELD_LOCATION = "location";
     public static final String FIELD_STATUS_TEXT = "statusText";
     public static final String FIELD_CREATED_AT = "createdAt";
+    public static final String FIELD_PROFILE_IMAGE_URL = "profileImageURL";
 
     public static void index(IndexItem[] items, File indexDir) {
         try {
@@ -98,15 +100,14 @@ public class Indexer {
                                           ,items[i].URL
                                           ,Field.Store.YES
                                           ,Field.Index.NO);
-                Field profileImageURL = new Field(FIELD_PHOTO
+                Field profileImageURL = new Field(FIELD_PROFILE_IMAGE_URL
                                                  ,items[i].profileImageURL
                                                  ,Field.Store.YES
                                                  ,Field.Index.NO);
-                Field name     = new Field(FIELD_USERNAME
+                Field name     = new Field(FIELD_NAME
                                           ,items[i].name
                                           ,Field.Store.YES
-                                          ,Field.Index.ANALYZED
-                                          ,Field.TermVector.WITH_POSITIONS_OFFSETS);
+                                          ,Field.Index.NO);
                 Field screenName = new Field(FIELD_SCREEN_NAME
                                             ,items[i].screenName
                                             ,Field.Store.YES
