@@ -1,7 +1,8 @@
 # require commons-httpclient
 # require weibo4j
 
-prj=`pwd`
+script=`readlink -f $0`
+prj=`dirname $script`
 lib=$prj/lib
 for i in $lib/*.jar;do
     export CLASSPATH=$CLASSPATH:$i
@@ -17,6 +18,8 @@ pushd bin > /dev/null
 echo " [ RUN ] java com.weibogrep.user.Updater"
 
 java -Dcom.weibogrep.util.enable_color=true com.weibogrep.user.Updater
+
+echo 1 >> /tmp/weibogrep/count.txt
 
 popd > /dev/null
 

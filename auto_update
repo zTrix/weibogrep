@@ -1,0 +1,11 @@
+crontab -d
+
+script=`readlink -f $0`
+pwd=`dirname $script`
+
+# run every 2 min
+
+crontab - <<XXX
+*/2 * * * * /bin/sh $pwd/update
+XXX
+
