@@ -6,7 +6,21 @@ import com.weibogrep.util.*;
 public class Updater {
 
     public static void main(String []args) {
-        updateAll();
+        if (args.length == 0) {
+            updateAll();
+            return;
+        }
+        int i = 0;
+        while (true) {
+            try {
+                ZLog.info("update : " + i);
+                updateAll();
+                Thread.sleep(1000 * 120);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            i++;
+        }
     }
 
     public static void updateAll() {

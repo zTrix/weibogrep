@@ -336,14 +336,14 @@ public class UserMgmt {
                 lastId = userStatus.get(0).getId();
                 addDoc(userStatus);
             }
-            /*
+            
             for (page = 2; userStatus.size() > 0; page++) {
                 userStatus = WeiboGate.getHomeTimeline(access, last, page);
                 addDoc(userStatus);
                 total += userStatus.size();
                 ZLog.info("user: " + id + " updating, adding " + userStatus.size() + " docs");
             }
-            */    
+            
             if (total > 0) {
                 ZLog.info("user: " + id + " updated, " + total + " docs added");
                 this.updateLastPost(lastId, total);
