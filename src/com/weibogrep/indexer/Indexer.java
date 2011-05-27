@@ -18,6 +18,8 @@ import org.apache.lucene.index.IndexWriter.MaxFieldLength;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
 
+import com.weibogrep.util.ZLog;
+
 public class Indexer {
     public static final String FIELD_ID = "id";
     public static final String FIELD_USERNAME = "username";
@@ -47,7 +49,7 @@ public class Indexer {
                                           ,Field.Store.YES
                                           ,Field.Index.NO);
                 Field date     = new Field(FIELD_DATE
-                                          ,"" + items[i].date.getTime()
+                                          ,"" + items[i].date
                                           ,Field.Store.YES
                                           ,Field.Index.NO);
                 Field photo    = new Field(FIELD_PHOTO

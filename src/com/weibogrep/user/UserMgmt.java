@@ -239,7 +239,7 @@ public class UserMgmt {
         IndexItem [] items = new IndexItem[sts.size()];
         int i = 0;
         for (Status st: sts) {
-            IndexItem ii = new IndexItem(st.getId(), st.getText(), st.getCreatedAt());
+            IndexItem ii = new IndexItem(st.getId(), st.getText(), st.getCreatedAt().getTime());
             ii.username = st.getUser().getName();
             ii.replyNum = st.getInReplyToUserId();
             ii.photo = st.getUser().getProfileImageURL();

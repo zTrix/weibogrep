@@ -10,6 +10,8 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Searcher;
+import org.apache.lucene.search.Sort;
+import org.apache.lucene.search.SortField;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
@@ -42,7 +44,8 @@ public class Greper {
         try {
             Query query = parser.parse(queryStr);
             query = query.rewrite(reader);
-            TopDocs hits = greper.search(query, 100);
+            Sort sort = new Sort(new SortField(Indexer.FIELD_DATE, SortField.LONG, true));
+            TopDocs hits = greper.search(query, null, 100, sort);
             BoldFormatter formatter = new BoldFormatter();
             Highlighter highlighter = new Highlighter(formatter, new QueryScorer(query));
             highlighter.setTextFragmenter(new SimpleFragmenter(50));
@@ -61,7 +64,7 @@ public class Greper {
                                                       maxNumFragmentsRequired, 
                                                       fragmentSeparator);
                 ret[i].id = Long.parseLong(hit.get(Indexer.FIELD_ID));
-                ret[i].date = new Date(Long.parseLong(hit.get(Indexer.FIELD_DATE)));
+                ret[i].date = Long.parseLong(hit.get(Indexer.FIELD_DATE));
                 ret[i].username = hit.get(Indexer.FIELD_USERNAME);
                 ret[i].replyNum = Integer.parseInt(hit.get(Indexer.FIELD_REPLY_NUM));
                 ret[i].photo = new URL(hit.get(Indexer.FIELD_PHOTO));
