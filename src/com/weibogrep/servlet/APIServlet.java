@@ -164,15 +164,24 @@ public class APIServlet extends HttpServlet {
                                                  ,(IndexReader  )session.getAttribute("reader")
                                                  ,(IndexSearcher)session.getAttribute("greper")
                                                  );
-                    JSONObject [] items = new JSONObject[rs.length];
+                    ArrayList<JSONObject> items = new ArrayList<JSONObject>();
+                    long newerthan = -1;
+                    try {
+                        newerthan = Long.parseLong(request.getParameter("newerthan"));
+                    } catch (Exception e) {
+                        newerthan = -1;
+                    }
                     for (int i = 0; i < rs.length; i++) {
-                        items[i] = new JSONObject().put("content", rs[i].content)
-                                                   .put("username", rs[i].username)
-                                                   .put("date", rs[i].date)
-                                                   .put("id", rs[i].id)
-                                                   .put("homepage", rs[i].homepage)
-                                                   .put("replyNum", rs[i].replyNum)
-                                                   .put("photo", rs[i].photo);
+                        if (newerthan <= 0 || rs[i].date > newerthan) {
+                            items.add( new JSONObject().put("content", rs[i].content)
+                                                       .put("username", rs[i].username)
+                                                       .put("date", rs[i].date)
+                                                       .put("id", rs[i].id)
+                                                       .put("homepage", rs[i].homepage)
+                                                       .put("replyNum", rs[i].replyNum)
+                                                       .put("photo", rs[i].photo)
+                            );
+                        }
                     }
                     new JSONObject().put("err", 0)
                                     .put("items", items)
