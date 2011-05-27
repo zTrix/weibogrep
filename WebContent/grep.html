@@ -20,7 +20,8 @@
             </div>
             <div class="main">
                 <div class="title">
-                    <center>微博实时搜索</center>
+                    <!--center>微博实时搜索</center-->
+                    <center><img src="/static/img/title.png" /></center>
                 </div>
         		<div class="doccount">
                     <div class="index">
@@ -31,23 +32,25 @@
                     </div>
 		        </div>
                 <div class="searchbar">
-                    <form id="grep_box" method="GET" accept-charset="UTF-8">
+                    <form id="grep_box" method="GET" accept-charset="UTF-8" >
                     <div class="stype" id="stype">
                         <select id="stype_selector">
-                            <option name="type" value="timeline">Timeline</option>
-                            <option name="type" value="friend">Friend</option>
-                            <option name="type" value="people">People</option>
+                            <option name="type" value="timeline">微博</option>
+                            <option name="type" value="friend">搜索好友</option>
+                            <option name="type" value="people">结识好友</option>
                         </select>
+                        <!--button class="showbutton" tabindex="-1" title="Show all items" ></button-->
                     </div>
                         :
                         <div id="query_box">
-                            <input type="text" name="query" maxlength="100" autocomplete="off"/>
+                            <input id="query_input" type="text" name="query" maxlength="100" autocomplete="off" placeholder="Search your weibo" />
                         </div>
                     </form>
                 </div>
                 <div class="rs_status" id="rs_status">Loading...</div>
                 
                 <div class="result" id="result"></div>
+                <div class="rs_status" id="showmore">Show More...</div>
                 <script type="text/javascript" src="/static/js/jquery.js"></script>
                 <script type="text/javascript" src="/static/js/jquery.tmpl.js"></script>
                 <script type="text/javascript" src="/static/js/api.js"></script>

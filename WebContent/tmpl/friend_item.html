@@ -6,13 +6,13 @@
     </div>
     <div class="right rs_item_main">
         <div>
-            <a class="username" href="http://weibo.com/${id}" target="_blank">${name}(@${screenName})</a>
+            <a class="username" href="http://weibo.com/${id}" target="_blank">${name}(@{{html screenName}})</a>
             <span class="location">
                 {{= location}}
             </span>
             <span class="time">
                 <img src="/static/img/time.gif" width="14px" height="14px" />
-                Join@ ${$item.getDate(createAt)} 
+                Join@ ${$item.getDate(createdAt)} 
             </span>
         </div>
         <div class="content">

@@ -1,5 +1,5 @@
 html, body {
-    background-color: #E7E7E7;
+    background-color: #FFFFFF;
 }
 
 .wrapper {
@@ -11,7 +11,7 @@ html, body {
     font-family: 微软雅黑,sans-serif;
     font-size: 30px;
     color: #505050;
-    margin-top: 30px;
+    margin-top: 150px;
 }
 
 .wrapper img#logo {

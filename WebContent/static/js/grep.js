@@ -12,6 +12,22 @@ var requery_timestamp;
 var last_query;
 var do_requery = 1;
 var last_qtype;
+var max_show_preclick = 10;
+
+function showmore(){
+    var count = 0;
+    var res = $('#result').children();
+    var i;
+    for (i = 0; i < res.length; i++){
+        if ($(res[i]).is(':visible') == false) {
+            count ++;
+            $(res[i]).show();
+            if (count >= max_show_preclick) break;
+        }
+    }
+    if (i < res.length) $('#showmore').show();
+    else $('#showmore').hide();
+}
 
 function requery() {
     if (do_requery == 0)  return;
@@ -26,7 +42,19 @@ function requery() {
        if (e.items.length > 0) {
             rs_count = rs_count + e.items.length;
             $('#rs_status').html("Found new results!");
-            $.tmpl(e.type, e.items).prependTo('#result');
+            $.tmpl(e.type, e.items, {
+                    getDate: function(m) {
+                        var d = new Date(m), now=$.now(), delta = now - d;
+                        if (delta<3600000) {
+                            return Math.round(delta/60000)+'分钟前';
+                        } else if (delta<86400000) {
+                            return Math.round(delta/3600000)+'小时前';
+                        } else if (delta<259200000) {      //three days
+                            return Math.round(delta/86400000)+'天前';
+                        }
+                        return d.getFullYear() + "年" + (d.getMonth()+1) + "月" + d.getDate() + "日";
+                    }
+           }).fadeIn().prependTo('#result');
             setTimeout(function(){
             $('#rs_status').html('Found ' + rs_count + ' results');}, rs_timeout);
     $('.rs_item').mouseenter(function(){
@@ -64,6 +92,12 @@ function requery() {
         $('#result').html("");
         if (query == "") return;
         last_qtype = $('#stype_selector').val();
+        if (last_qtype == "people") {
+        $('#rs_status').html('Not supported yet...');
+        $('#rs_status').show();
+        $('#rs_status').fadeOut(10000);
+            return;
+        }
         $('#rs_status').html('Loading...');
         $('#rs_status').show();
         API.grep({
@@ -94,8 +128,10 @@ function requery() {
                         }
                         return d.getFullYear() + "年" + (d.getMonth()+1) + "月" + d.getDate() + "日";
                     }
-                }));
+                }).hide());
+                showmore();
                 $('#rs_status').html('Found ' + rs_count + ' results');
+                $('#rs_status').show();
             $('.rs_item').mouseenter(function(){
                 $(this).addClass("rs_item_mouseenter");
             });
@@ -103,7 +139,7 @@ function requery() {
                 $(this).removeClass("rs_item_mouseenter");
             });
             }
-            requery_handler = setTimeout(requery, requery_timeout);
+            if (e.type=="timeline")  requery_handler = setTimeout(requery, requery_timeout);
         }).error(function() {
             console.log('api service failed');
             $('#rs_status').html('Connecting error...');
@@ -117,8 +153,14 @@ function requery() {
         });
     });
 
+    $('#showmore').click(showmore);
 
     $('#rs_status').hide();
+    $('#showmore').hide();
+
+    $('#stype_selector').change(function(){
+        $('#query_input').focus();
+    });
 
     API.user_info().success(function(e) {
         user = e;

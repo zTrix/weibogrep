@@ -38,7 +38,7 @@ html, body {
     margin: auto;
 }
 .wrapper .searchbar{
-    margin:50px auto;
+    margin:30px auto;
     width:600px;
 }
 .wrapper #stype {
@@ -55,6 +55,10 @@ html, body {
 .wrapper #stype_selector {
     display:inline;
     vertical-align:baseline;
+}
+
+.wrapper #stype .showbutton {
+    background:url("/static/img/combobox.png") no-repeat scroll 0 0 transparent;
 }
 
 .wrapper #grep_box input[type=text]{
@@ -89,7 +93,7 @@ html, body {
     text-align:center;
     background-color:#373737;
     -webkit-border-radius:5px;
-    width:518px;
+    width:558px;
     margin:0 auto;
     margin-top:-15px;
     line-height:1.4;
@@ -104,7 +108,7 @@ html, body {
 
 .wrapper .rs_item {
     min-height:70px;
-    width:518px;
+    width:558px;
     margin:10px auto;
     position:relative;
     overflow:hidden;
@@ -116,7 +120,7 @@ html, body {
 }
 
 .wrapper .rs_item .rs_item_main {
-    width:450px;    
+    width:490px;    
     margin-bottom:20px;
 }
 
@@ -145,7 +149,14 @@ html, body {
     color:#457f01;
 }
 
+.wrapper .rs_item .username b{
+    background-color:#FF8;
+}
+
 .wrapper .rs_item .location {
     font-size:12px;
 }
 
+.wrapper #showmore {
+    cursor: pointer;
+}
